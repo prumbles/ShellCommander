@@ -1,0 +1,29 @@
+{
+    "Count": 2,
+    "Items": [
+        {
+            "AlbumTitle": {
+                "S": "Everything is Love"
+            },
+            "SongTitle": {
+                "S": "NICE"
+            },
+            "Artist": {
+                "S": "Beyonce"
+            }
+        },
+        {
+            "AlbumTitle": {
+                "S": "Everything is Love"
+            },
+            "SongTitle": {
+                "S": "LOVEHAPPY"
+            },
+            "Artist": {
+                "S": "Beyonce"
+            }
+        }
+    ],
+    "ScannedCount": 2,
+    "ConsumedCapacity": null
+}

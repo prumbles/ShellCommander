@@ -1,0 +1,29 @@
+{
+    "Count": 2,
+    "Items": [
+        {
+            "AlbumTitle": {
+                "S": "Help!"
+            },
+            "SongTitle": {
+                "S": "Yesterday"
+            },
+            "Artist": {
+                "S": "The Beatles"
+            }
+        },
+        {
+            "AlbumTitle": {
+                "S": "Help!"
+            },
+            "SongTitle": {
+                "S": "Ticket to Ride"
+            },
+            "Artist": {
+                "S": "The Beatles"
+            }
+        }
+    ],
+    "ScannedCount": 2,
+    "ConsumedCapacity": null
+}

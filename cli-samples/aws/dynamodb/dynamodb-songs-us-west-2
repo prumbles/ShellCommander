@@ -1,0 +1,29 @@
+{
+    "Count": 2,
+    "Items": [
+        {
+            "AlbumTitle": {
+                "S": "Exodus"
+            },
+            "SongTitle": {
+                "S": "One Love"
+            },
+            "Artist": {
+                "S": "Bob Marley"
+            }
+        },
+        {
+            "AlbumTitle": {
+                "S": "Exodus"
+            },
+            "SongTitle": {
+                "S": "Jamming"
+            },
+            "Artist": {
+                "S": "Bob Marley"
+            }
+        }
+    ],
+    "ScannedCount": 2,
+    "ConsumedCapacity": null
+}

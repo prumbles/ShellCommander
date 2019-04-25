@@ -1,0 +1,19 @@
+{
+  "name": "shellcommander",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "both": "concurrently \"npm run start\" \"npm start --prefix client/\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "shelljs": "^0.8.3"
+  }
+}
