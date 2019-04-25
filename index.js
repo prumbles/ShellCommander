@@ -46,3 +46,9 @@ const port = process.env.PORT || 5000;
 app.listen(port, 'localhost');
 
 console.log('App is listening on port ' + port);
+console.log(`WARNING!! Extreme care needs to be taken when running this application!!!
+Shell scripts get sent from the browser to the server, and get executed blindly.
+This is why this application only allows connections from localhost.
+If you need to run this application remotely, please use ssh port forwarding from your local localhost to the remote localhost.
+You can use run this command on your machine to forward traffic to the remote host: 
+    ssh -l [USERNAME] -L [REMOTE_PORT]:localhost:[LOCAL_PORT] [REMOTE_HOST]`)

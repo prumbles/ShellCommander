@@ -79,7 +79,8 @@ const defaultConfig = {
         "songs" : {
             shell: `
                 cat cli-samples/aws/dynamodb/dynamodb-songs-{{region}}
-            `
+            `,
+            type: 'json'
         }
     }
 };
