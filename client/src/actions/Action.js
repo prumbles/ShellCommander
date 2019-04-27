@@ -7,7 +7,9 @@ import ResultCreator from './ResultCreator'
 
 const styles = theme => ({
   root: {
-
+    width: "100%",
+    overflow: "hidden",
+    padding: 5
   },
   formContainer: {
  

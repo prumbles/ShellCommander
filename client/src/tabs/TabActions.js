@@ -75,12 +75,12 @@ class CustomizedTabs extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, key } = this.props;
     const value = configurationStore.selectedTabItem ? configurationStore.selectedTabItem.text : false
     const subTabs = configurationStore.selectedTab ? configurationStore.selectedTab.items : [];
 
     return (
-      <div className={classes.root}>
+      <div className={classes.root} key={key}>
         <Tabs
           value={value}
           onChange={this.handleChange}

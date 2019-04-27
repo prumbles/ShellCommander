@@ -80,7 +80,23 @@ const defaultConfig = {
             shell: `
                 cat cli-samples/aws/dynamodb/dynamodb-songs-{{region}}
             `,
-            type: 'json'
+            type: 'json',
+            arrays: {
+                "Items": {
+                    clicks: {
+                        'Artist': 'artist'
+                    },
+                    variables: {
+                        'artist': 'Artist.S'
+                    }
+                }
+            }
+        },
+        "artist" : {
+            shell: `
+                cat "cli-samples/text/{{artist}}.txt"
+            `,
+            type: 'raw'
         }
     }
 };

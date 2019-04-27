@@ -7,16 +7,20 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography';
 import configurationStore from '../store/configurationStore'
+import ResultCreator from './ResultCreator';
 
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
   table: {
-    minWidth: 700,
+    minWidth: 700
   },
   clickable: {
     cursor: 'pointer'
@@ -25,9 +29,10 @@ const styles = theme => ({
 
 class TableResult extends React.Component {
 
-  cellClick = (row, columnIndex, e) => {
+  cellClick = (row, rowIndex, columnIndex, e) => {
     e.preventDefault()
-    let prev = this.props.data.action
+    let data = this.props.data
+    let prev = data.action
     let variables = []
 
     if (prev.inputs) {
@@ -43,8 +48,22 @@ class TableResult extends React.Component {
           })
         }
       })
+      configurationStore.selectNextAction(variables, prev, prev.clicks[columnIndex])
+    } else if (prev.arrays && prev.arrays[data.arrayName]) {
+      let arrayData = prev.arrays[data.arrayName]
+
+      if (arrayData.variables) {
+        Object.keys(arrayData.variables).forEach(key => {
+          variables.push({
+            text: key,
+            value: ResultCreator._safeToString(ResultCreator._queryObject(data.rawRows[rowIndex], arrayData.variables[key]))
+          })
+        })
+      }
+
+      configurationStore.selectNextAction(variables, prev, data.clicks[columnIndex])
     }
-    configurationStore.selectNextAction(variables, prev, prev.clicks[columnIndex])
+    
   }
 
   render() {
@@ -65,7 +84,7 @@ class TableResult extends React.Component {
 
     let rowComps = []
 
-    data.rows.forEach(row => {
+    data.rows.forEach((row, rowIndex) => {
       let cells = []
 
       for (let i=0;i<dataInfo.colCnt;i++) {
@@ -76,8 +95,8 @@ class TableResult extends React.Component {
           txt = ''
         }
 
-        if (data.action.clicks && data.action.clicks[i]) {
-          txt = <a className={classes.clickable} href="#" onClick={(e) => this.cellClick(row, i, e)}>
+        if (data.clicks && data.clicks[i]) {
+          txt = <a className={classes.clickable} href="#" onClick={(e) => this.cellClick(row, rowIndex, i, e)}>
             <span>{txt}</span>
           </a>
         }
@@ -98,6 +117,13 @@ class TableResult extends React.Component {
 
     return (
       <Paper className={classes.root}>
+      <Toolbar>
+        <div>
+          <Typography variant="h6">
+              {data.arrayName}
+          </Typography>
+        </div>
+      </Toolbar>
         <Table className={classes.table}>
           {headerComps.length > 0 &&
             <TableHead>
