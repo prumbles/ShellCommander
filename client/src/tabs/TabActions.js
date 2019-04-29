@@ -4,6 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Action from '../actions/Action'
+import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
+import Link from '@material-ui/core/Link';
 import configurationStore from '../store/configurationStore'
 
 const styles = theme => ({
@@ -46,6 +49,9 @@ const styles = theme => ({
       color: '#40a9ff',
     },
   },
+  breadcrumbCont: {
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+  },
   tabSelected: {},
   typography: {
     padding: theme.spacing.unit * 3,
@@ -61,6 +67,12 @@ class CustomizedTabs extends React.Component {
   state = {
     
   };
+
+  chainItemClick = (event, chainItem) => {
+    event.preventDefault()
+
+    configurationStore.selectPreviousAction(chainItem)
+  }
 
   handleChange = (event, value) => {
     configurationStore.selectTabItemByText(value)
@@ -79,6 +91,24 @@ class CustomizedTabs extends React.Component {
     const value = configurationStore.selectedTabItem ? configurationStore.selectedTabItem.text : false
     const subTabs = configurationStore.selectedTab ? configurationStore.selectedTab.items : [];
 
+    let breadcrumbItems = []
+    if (configurationStore.actionChain.length > 0) {
+      for (let i=0;i<(configurationStore.actionChain.length - 1);i++) {
+        let chainItem = configurationStore.actionChain[i]
+
+        breadcrumbItems.push(
+          <Link key={chainItem._id} color="inherit" href="/" onClick={(event) => { this.chainItemClick(event, chainItem) }}>
+            {chainItem.text}
+          </Link>
+        )
+      }
+
+      const lastItem = configurationStore.actionChain[configurationStore.actionChain.length - 1]
+      breadcrumbItems.push(
+        <Typography key={lastItem._id} color="textPrimary">{lastItem.text}</Typography>
+      )
+    }
+
     return (
       <div className={classes.root} key={key}>
         <Tabs
@@ -95,6 +125,13 @@ class CustomizedTabs extends React.Component {
                     classes={{ root: classes.tabRoot, selected: classes.tabSelected }} />
             })}
         </Tabs>
+        {breadcrumbItems.length > 0 && 
+          <div className={classes.breadcrumbCont}>
+            <Breadcrumbs aria-label="Breadcrumb">
+              {breadcrumbItems}
+            </Breadcrumbs>
+          </div>
+        }
         <Action></Action>
       </div>
     );

@@ -6,7 +6,6 @@ class configurationStore extends store {
     constructor() {
         super()
         this._data = new configurationData()
-        this._variables = []
         this._configuration = this._data.getConfig()
         this._refreshData()
     }
@@ -35,6 +34,10 @@ class configurationStore extends store {
         return this._actionResponse
     }
 
+    get actionChain() {
+        return this._actionChain
+    }
+
     updateConfiguration = (config) => {
         this._data.set(config)
         this._configuration = this._data.getConfig()
@@ -59,6 +62,7 @@ class configurationStore extends store {
         this._selectedTabItem = null
         this._emitChange('selectedTabItem')
         this._selectedAction = null
+        this._actionChain = []
         this._emitChange('selectedAction')
         this._actionResponse = null
         this._emitChange('actionResponse')
@@ -72,6 +76,7 @@ class configurationStore extends store {
         this._selectedTabItem = null
         this._emitChange('selectedTabItem')
         this._selectedAction = null
+        this._actionChain = []
         this._emitChange('selectedAction')
         this._actionResponse = null
         this._emitChange('actionResponse')
@@ -85,69 +90,117 @@ class configurationStore extends store {
         this.selectAction(this._selectedTabItem)
     }
 
-    selectAction = (action) => {
+    selectAction = (action, variables) => {
         this._clearVariables()
-        this._selectAction(action)
+        this._selectAction(action, variables)
     }
 
-    selectNextAction = (previousVariables, previousAction, nextActionName) => {
-        this._variables = previousVariables
-        if (this._previousInputValues) {
-            this._previousInputValues.forEach(iv => {
-                this._variables.push({
-                    text: iv.text,
-                    value: iv.value
-                })
-            }) 
-        }
-
+    selectNextAction = (variables, nextActionName) => {
         let nextAction = this._configuration.actions[nextActionName]
 
-        this._selectAction(nextAction)
+        this._selectAction(nextAction, variables)
     }
 
-    _selectAction = (action) => {
+    _replaceVariablesInText = (variables, text) => {
+        variables.forEach(v => {
+            text = text.split("{{" + v.text + "}}").join(v.value)
+        })
+
+        return text
+    }
+
+
+    selectPreviousAction = (chainItem) => {
+        for (let i=this._actionChain.length-1; i>=0; i--) {
+            if (chainItem === this._actionChain[i]) {
+                this._actionResponse = chainItem.response
+                this._emitChange('actionResponse')
+                this._selectedAction = chainItem.action
+                this._emitChange('selectedAction')
+                return
+            }
+
+            this._actionChain.pop()
+        }
+    }
+
+    _selectAction = (action, variables) => {
         if (action.text && action.action) {
             //We are not in a real action, but a tab that points to an action
 
             action = this._configuration.actions[action.action]
         }
+
+        let actionChainItem = {
+            _id: 'chainItem' + this._actionChain.length,
+            action: action,
+            response: null,
+            variables: variables || [],
+            inputVariables: [],
+            text: this._replaceVariablesInText(variables || [], action.text)
+        }
+        
+        this._actionChain.push(actionChainItem)   
         
         this._actionResponse = null
         this._emitChange('actionResponse')
         this._selectedAction = action
-        this._emitChange('selectedAction')
+        this._emitChange('selectedAction')     
+    }
+
+    _getPreviousVariables = (action) => {
+        let variables = []
+        for (let i=0;i<this._actionChain.length;i++) {
+            let item = this._actionChain[i]
+
+            if (item.action === action) {
+                return variables
+            }
+
+            item.variables.forEach(v => {
+                variables.push(v)
+            })
+
+            item.inputVariables.forEach(v => {
+                variables.push(v)
+            })
+        }
+
+        return variables
     }
 
     runSelectedAction = (inputValues) => {
         let action = this._selectedAction
-        this._previousInputValues = inputValues
 
         if (action) {
-
-            let copiedAction = this._copyAction(action)
+            let chainItem = this._getActionChainItem(action)
+            let actionForShellExec = this._copyAction(action)
 
             //Get all variables (including the context) and run shell action with replaced variables
             let allVariables = []
 
             if (this._actionRequiresInput(action)) {
                 //get the variables from the input values for the selected action
+                chainItem.inputVariables = []
                 inputValues.forEach(iv => {
-                    allVariables.push({
+                    let ivVariable = {
                         text: iv.text,
                         value: iv.value
-                    })
+                    }
+                    allVariables.push(ivVariable)
+                    chainItem.inputVariables.push(ivVariable)
                 })               
             }
 
-            if (this._variables) {
-                this._variables.forEach(v => {
-                    allVariables.push({
-                        text: v.text,
-                        value: v.value
-                    })
-                })
-            }
+            // get the variables passed to the current action
+            chainItem.variables.forEach(v => {
+                allVariables.push(v)
+            })
+
+            // get variables from previous variables in action chain
+            this._getPreviousVariables(action).forEach(v => {
+                allVariables.push(v)
+            })
 
             //get variables from the context object
             if (this.selectedContext) {
@@ -159,23 +212,49 @@ class configurationStore extends store {
                 })
             }
 
-            allVariables.forEach(v => {
-                copiedAction.shell = copiedAction.shell.split("{{" + v.text + "}}").join(v.value)
-            })
+            actionForShellExec.shell = this._replaceVariablesInText(allVariables, actionForShellExec.shell)
+            chainItem.text = this._replaceVariablesInText(allVariables, action.text)
             
             this._loading = true
             this._emitChange('loading')
-            data.runShellAction(copiedAction, (resp) => {
-                this._actionResponse = {
-                    value: copiedAction.type === 'json' ? JSON.parse(resp.text) : resp.text,
-                    error: resp.error,
-                    valueType: copiedAction.type
+            data.runShellAction(actionForShellExec, (resp) => {
+
+                let responseValue = resp.text
+
+                if (actionForShellExec.type === 'json') {
+                    responseValue = JSON.parse(resp.text)
+
+                    if (Array.isArray(responseValue)) {
+                        responseValue = {
+                            Items: responseValue
+                        }
+                    }
                 }
+
+                this._actionResponse = {
+                    value: responseValue,
+                    error: resp.error,
+                    valueType: actionForShellExec.type
+                }
+                if (chainItem) {
+                    chainItem.response = this._actionResponse
+                }
+
                 this._emitChange('actionResponse')
                 this._loading = false
                 this._emitChange('loading')
             })
         }
+    }
+
+    _getActionChainItem = action => {
+        return this._actionChain.find(c => {
+            return c.action === action
+        })
+    }
+
+    _getActiveActionChainItem = () => {
+        return this._actionChain.length > 0 ? this._actionChain[this._actionChain.length - 1] : null
     }
 
     _copyAction = action => {
@@ -204,8 +283,8 @@ class configurationStore extends store {
     }
 
     _clearVariables = () => {
-        this._variables = []
         this._previousInputValues = []
+        this._actionChain = []
     }
 }
 

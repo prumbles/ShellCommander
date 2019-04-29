@@ -41,7 +41,7 @@ class ResultCreator {
                 } else if (!isGrid && !renderGrids) {
                     let convertedVal = ResultCreator._safeToString(val)
                     elements.push(<div style={styles.metaCont} key={'plainval' + ind.toString()}>
-                        <Typography color="secondary" inline="true" variant="subheading" style={styles.meta}>{k}</Typography><Typography color="textPrimary" inline="true" variant="body1">{convertedVal}</Typography>
+                        <Typography color="secondary" inline={true} variant="subheading" style={styles.meta}>{k}</Typography><Typography color="textPrimary" inline={true} variant="body1">{convertedVal}</Typography>
                         </div>)
                 }
             })

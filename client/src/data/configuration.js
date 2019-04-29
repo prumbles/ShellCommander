@@ -48,17 +48,19 @@ const defaultConfig = {
     ],
     actions: {
         "catFromLs": {
+            text: '{{filename}}',
             shell: `
             path="{{path}}"
 
             if [ -z $path ]; then
                 path="./"
             fi
-            cat \${path}/{{filename}}
+            cat \${path}/"{{filename}}"
             `,
             type: 'raw'
         },
         "ls": {
+            text: 'ls',
             inputs: ['path'],
             shell: `
                 ls {{path}}
@@ -68,6 +70,7 @@ const defaultConfig = {
             clicks: ['catFromLs']
         },
         "lsPlus": {
+            text: 'ls',
             inputs: ['path'],
             shell: `
                 ls -ltra {{path}}
@@ -77,6 +80,7 @@ const defaultConfig = {
             clicks: [_N,_N,_N,_N,_N,_N,_N,_N,'catFromLs']
         },
         "songs" : {
+            text: 'Songs',
             shell: `
                 cat cli-samples/aws/dynamodb/dynamodb-songs-{{region}}
             `,
@@ -93,6 +97,7 @@ const defaultConfig = {
             }
         },
         "artist" : {
+            text: '{{artist}}',
             shell: `
                 cat "cli-samples/text/{{artist}}.txt"
             `,

@@ -48,7 +48,7 @@ class TableResult extends React.Component {
           })
         }
       })
-      configurationStore.selectNextAction(variables, prev, prev.clicks[columnIndex])
+      configurationStore.selectNextAction(variables, prev.clicks[columnIndex])
     } else if (prev.arrays && prev.arrays[data.arrayName]) {
       let arrayData = prev.arrays[data.arrayName]
 
@@ -61,7 +61,7 @@ class TableResult extends React.Component {
         })
       }
 
-      configurationStore.selectNextAction(variables, prev, data.clicks[columnIndex])
+      configurationStore.selectNextAction(variables, data.clicks[columnIndex])
     }
     
   }
@@ -96,7 +96,7 @@ class TableResult extends React.Component {
         }
 
         if (data.clicks && data.clicks[i]) {
-          txt = <a className={classes.clickable} href="#" onClick={(e) => this.cellClick(row, rowIndex, i, e)}>
+          txt = <a className={classes.clickable} href="#/" onClick={(e) => this.cellClick(row, rowIndex, i, e)}>
             <span>{txt}</span>
           </a>
         }
