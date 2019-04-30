@@ -24,7 +24,7 @@ const defaultConfig = {
     ],
     tabs: [
         {
-            text: 'Sample Bash Commands',
+            text: 'Sample Commands',
             items: [
                 {
                     text: 'ls',
@@ -41,24 +41,18 @@ const defaultConfig = {
                 {
                     text: 'top (Enhanced)',
                     action: 'topEnhanced'
-                }
-            ]
-        },
-        {
-            text: 'AWS CLI-style commands',
-            items: [
+                },
                 {
-                    text: 'DynamoDB - Get list of songs',
+                    text: 'Songs',
                     action: 'songs'
-                }
-            ]
-        },
-        {
-            text: 'Random',
-            items: [
+                },
                 {
                     text: 'MLB Data',
                     action: 'mlbData'
+                },
+                {
+                    text: 'MLB Data (Modified)',
+                    action: 'mlbData2'
                 },
                 {
                     text: 'Admin Information',
@@ -159,15 +153,48 @@ const defaultConfig = {
                         'name': 'teamWiki'
                     },
                     variables: {
-                        'team': 'name'
+                        'team': 'name',
+                        'manager': 'current_manager.name'
                     },
-                    omit: ['/common/topic/image','type','/sports/sports_team/team_mascot']
+                    omit: ['/common/topic/image','type','/sports/sports_team/team_mascot'],
+                    add: {
+                        'Manager': 'current_manager.name->managerWiki',
+                        'Field': '/sports/sports_team/arena_stadium.1.name'
+                    }
+                }
+            }
+        },
+        "mlbData2" : {
+            text: 'MLB Data',
+            shell: `
+                cat cli-samples/random/mlb.json
+            `,
+            type: 'json',
+            arrays: {
+                "result": { 
+                    clicks: {
+                        'name': 'teamWiki'
+                    },
+                    variables: {
+                        'team': 'name',
+                        'manager': 'current_manager.name'
+                    },
+                    omit: ['*'],
+                    add: {
+                        'Manager': 'current_manager.name->managerWiki',
+                        'Field': '/sports/sports_team/arena_stadium.1.name'
+                    }
                 }
             }
         },
         "teamWiki" : {
             text: '',
             url: 'https://en.wikipedia.org/wiki/{{team}}',
+            type: 'url'
+        },
+        "managerWiki" : {
+            text: '',
+            url: 'https://en.wikipedia.org/wiki/{{manager}}',
             type: 'url'
         },
         "getAdmin" : {

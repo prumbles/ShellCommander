@@ -68,28 +68,28 @@ class ResultCreator {
     }
 
     static _isPositiveInteger(s) {
-        return /^\+?[1-9][\d]*$/.test(s);
+        return /^\+?[0-9][\d]*$/.test(s);
     }
 
     static _queryObject(obj, query) {
         let items = query.split('.')
         let ptr = obj
 
-        items.forEach(item => {
-            let itm = item
+        for (let i=0;i< items.length; i++) {
+            let item = items[i]
             let next = null
-            if (ResultCreator._isPositiveInteger(itm)) {
-                next = parseInt(itm)
+            if (ResultCreator._isPositiveInteger(item)) {
+                next = ptr[parseInt(item)]
             } else {
-                next = ptr[itm]
+                next = ptr[item]
             }
 
-            if (next) {
+            if ( (typeof next !== 'undefined') && next !== null) {
                 ptr = next
             } else {
-                return ptr
+                return ""
             }
-        })
+        }
 
         return ptr
     }
@@ -113,6 +113,28 @@ class ResultCreator {
         return omitMap
     }
 
+    static _getAddedColumnData(arrConfig) {
+        if (arrConfig.add) {
+            let data = []
+            //Add the columns from the "add" parameter
+            Object.keys(arrConfig.add).forEach((k) => {
+                let addParts = arrConfig.add[k].split('->')
+
+                let col = {
+                    text: k,
+                    path: addParts[0],
+                    click: (addParts.length > 1) ? addParts[1] : null
+                }
+
+                data.push(col)
+            })
+
+            return data
+        }
+
+        return []
+    }
+
     static _getJsonArrayGrid = (action, rows, arrayName, gridKey) => {
         let arrConfig = action.arrays[arrayName]
 
@@ -129,20 +151,39 @@ class ResultCreator {
 
         let headerIndexMap = {}
 
+        let addedColumns = []
+
         if (rows.length > 0) {
             let headerInd = 0
             let omitMap = ResultCreator._getOmitMap(arrConfig.omit)
             
-            Object.keys(rows[0]).forEach((k) => {
-                if (arrConfig && !omitMap[k]) {
-                    data.headers.push({
-                        text: k
-                    })
-                    data.clicks.push(null)
+            if (!omitMap['*']) { //if we have a * indicating to omit all columns, then skip all
+                Object.keys(rows[0]).forEach((k) => {
+                    if (arrConfig && !omitMap[k]) {
+                        data.headers.push({
+                            text: k
+                        })
+                        
+                        data.clicks.push(null)
 
-                    headerIndexMap[k] = headerInd
-                    headerInd++
-                }
+                        if (arrConfig && arrConfig.clicks && arrConfig.clicks[k]) {
+                            data.clicks[headerInd] = arrConfig.clicks[k]
+                        }
+
+                        headerIndexMap[k] = headerInd
+                        headerInd++
+                    }
+                })
+            }
+
+            addedColumns = ResultCreator._getAddedColumnData(arrConfig)
+
+            addedColumns.forEach(c => {
+                data.headers.push({
+                    text: c.text
+                })
+
+                data.clicks.push(c.click)
             })
         }
 
@@ -154,24 +195,22 @@ class ResultCreator {
                 values: []
             }
 
-            let keys = Object.keys(row)
-            for(let i=0;i<keys.length;i++) {
+            //populate regular column cells (minus added columns)
+            let regularColCnt = data.headers.length - addedColumns.length
+            while(regularColCnt > 0) {
                 formattedRow.values.push("")
+                regularColCnt--
             }
-
+            let keys = Object.keys(row)
             keys.forEach(rowKey => {
                 let headerIndex = headerIndexMap[rowKey]
                 if (typeof headerIndex !== 'undefined') {
                     formattedRow.values[headerIndex] = ResultCreator._getRowKeyValue(row, rowKey)
-                    
-                    if (arrConfig) {
-                        if (arrConfig.clicks) {
-                            if (arrConfig.clicks[rowKey]) {
-                                data.clicks[headerIndex] = arrConfig.clicks[rowKey]
-                            }
-                        }
-                    }
                 }
+            })
+
+            addedColumns.forEach(c => {
+                formattedRow.values.push(ResultCreator._safeToString(ResultCreator._queryObject(row, c.path)))
             })
 
             data.rows.push(formattedRow)
