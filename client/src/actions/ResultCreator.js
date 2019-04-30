@@ -39,10 +39,14 @@ class ResultCreator {
                 if (isGrid && renderGrids) {
                     elements.push(this._getJsonArrayGrid(action, val, k, 'arrayGrid' + ind.toString()))
                 } else if (!isGrid && !renderGrids) {
-                    let convertedVal = ResultCreator._safeToString(val)
-                    elements.push(<div style={styles.metaCont} key={'plainval' + ind.toString()}>
-                        <Typography color="secondary" inline={true} variant="subheading" style={styles.meta}>{k}</Typography><Typography color="textPrimary" inline={true} variant="body1">{convertedVal}</Typography>
-                        </div>)
+                    let omitMap = ResultCreator._getOmitMap(action.omit)
+
+                    if (!omitMap[k]) {
+                        let convertedVal = ResultCreator._safeToString(val)
+                        elements.push(<div style={styles.metaCont} key={'plainval' + ind.toString()}>
+                            <Typography color="secondary" inline={true} variant="subheading" style={styles.meta}>{k}</Typography><Typography color="textPrimary" inline={true} variant="body1">{convertedVal}</Typography>
+                            </div>)
+                    }
                 }
             })
         })
@@ -97,7 +101,21 @@ class ResultCreator {
         return ResultCreator._safeToString(keyValue)
     }
 
+    static _getOmitMap(omitArray) {
+        let omitMap = {}
+
+        if (omitArray) {
+            omitArray.forEach(o => {
+                omitMap[o] = true
+            })
+        }
+
+        return omitMap
+    }
+
     static _getJsonArrayGrid = (action, rows, arrayName, gridKey) => {
+        let arrConfig = action.arrays[arrayName]
+
         let data = {
             headers: [],
             rows: [],
@@ -112,13 +130,19 @@ class ResultCreator {
         let headerIndexMap = {}
 
         if (rows.length > 0) {
-            Object.keys(rows[0]).forEach((k,i) => {
-                data.headers.push({
-                    text: k
-                })
-                data.clicks.push(null)
+            let headerInd = 0
+            let omitMap = ResultCreator._getOmitMap(arrConfig.omit)
+            
+            Object.keys(rows[0]).forEach((k) => {
+                if (arrConfig && !omitMap[k]) {
+                    data.headers.push({
+                        text: k
+                    })
+                    data.clicks.push(null)
 
-                headerIndexMap[k] = i
+                    headerIndexMap[k] = headerInd
+                    headerInd++
+                }
             })
         }
 
@@ -139,10 +163,12 @@ class ResultCreator {
                 let headerIndex = headerIndexMap[rowKey]
                 if (typeof headerIndex !== 'undefined') {
                     formattedRow.values[headerIndex] = ResultCreator._getRowKeyValue(row, rowKey)
-                    let arrConfig = action.arrays[arrayName]
+                    
                     if (arrConfig) {
-                        if (arrConfig.clicks[rowKey]) {
-                            data.clicks[headerIndex] = arrConfig.clicks[rowKey]
+                        if (arrConfig.clicks) {
+                            if (arrConfig.clicks[rowKey]) {
+                                data.clicks[headerIndex] = arrConfig.clicks[rowKey]
+                            }
                         }
                     }
                 }
@@ -184,8 +210,15 @@ class ResultCreator {
     }
 
     static  _getRawText = (action, actionResponse) => {
+        let style = {
+            whiteSpace: "pre",
+            fontFamily: '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
+        }
+
+        actionResponse.value = actionResponse.value.split('\t').join('&nbsp;&nbsp;&nbsp;&nbsp;')
+
         return <p>
-            {actionResponse.value}
+            <span style={style}>{actionResponse.value}</span>
         </p>
     }
 

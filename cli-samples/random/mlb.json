@@ -1,0 +1,1390 @@
+{
+	"result": [
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Chase Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1998"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/d_baxter_the_bobcat",
+					"name": "D. Baxter the Bobcat",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Kirk Gibson"
+			},
+			"division": {
+				"name": "National League West"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Arizona Diamondbacks",
+			"team_stats": [
+				{
+					"losses": 80,
+					"season": "2008 Major League Baseball season",
+					"wins": 82
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Turner Field"
+				},
+				{
+					"name": "State Mutual Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1966"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/07vbb7",
+					"name": "Homer",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/m/07vbfd",
+					"name": "Rally",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/en/chief_noc-a-homa",
+					"name": "Chief Noc-A-Homa",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Fredi González"
+			},
+			"division": {
+				"name": "National League East"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Atlanta Braves",
+			"team_stats": [
+				{
+					"losses": 90,
+					"season": "2008 Major League Baseball season",
+					"wins": 72
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Oriole Park at Camden Yards"
+				},
+				{
+					"name": "Ed Smith Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1954"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/the_oriole_bird",
+					"name": "The Oriole Bird",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Buck Showalter"
+			},
+			"division": {
+				"name": "American League East"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Baltimore Orioles",
+			"team_stats": [
+				{
+					"losses": 93,
+					"season": "2008 Major League Baseball season",
+					"wins": 68
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [
+				{
+					"id": "/wikipedia/images/commons_id/5600894",
+					"timestamp": "2011-09-22T02:51:59.0000Z"
+				}
+			],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Fenway Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1901"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/wally_the_green_monster",
+					"name": "Wally the Green Monster",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "John Farrell"
+			},
+			"division": {
+				"name": "American League East"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Boston Red Sox",
+			"team_stats": [
+				{
+					"losses": 67,
+					"season": "2008 Major League Baseball season",
+					"wins": 95
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Wrigley Field"
+				},
+				{
+					"name": "HoHoKam Stadium"
+				},
+				{
+					"name": "New Mesa Ballpark"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1870"
+				}
+			],
+			"/sports/sports_team/team_mascot": [],
+			"current_manager": {
+				"name": "Dale Sveum"
+			},
+			"division": {
+				"name": "National League Central"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Chicago Cubs",
+			"team_stats": [
+				{
+					"losses": 64,
+					"season": "2008 Major League Baseball season",
+					"wins": 97
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "U.S. Cellular Field"
+				},
+				{
+					"name": "Comiskey Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1900"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/0b7nrv",
+					"name": "Southpaw",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Robin Ventura"
+			},
+			"division": {
+				"name": "American League Central"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Chicago White Sox",
+			"team_stats": [
+				{
+					"losses": 74,
+					"season": "2008 Major League Baseball season",
+					"wins": 89
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Great American Ball Park"
+				},
+				{
+					"name": "Crosley Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1881"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/06hs6l",
+					"name": "Gapper",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/m/0j_22f3",
+					"name": "Rosie Red",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/m/0j_22f9",
+					"name": "Mr. Redlegs",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/en/mr_red",
+					"name": "Mr. Red",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": null,
+			"division": {
+				"name": "National League Central"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Cincinnati Reds",
+			"team_stats": [
+				{
+					"losses": 88,
+					"season": "2008 Major League Baseball season",
+					"wins": 74
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Progressive Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1901"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/02w_rtq",
+					"name": "Slider",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Terry Francona"
+			},
+			"division": {
+				"name": "American League Central"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Cleveland Indians",
+			"team_stats": [
+				{
+					"losses": 81,
+					"season": "2008 Major League Baseball season",
+					"wins": 81
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Coors Field"
+				},
+				{
+					"name": "McNichols Sports Arena"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1993"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/0fgjk2",
+					"name": "Dinger",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Walt Weiss"
+			},
+			"division": {
+				"name": "National League West"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Colorado Rockies",
+			"team_stats": [
+				{
+					"losses": 88,
+					"season": "2008 Major League Baseball season",
+					"wins": 74
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Comerica Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1894"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/wikipedia/en_title/Paws_$0028mascot$0029",
+					"name": "Paws",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Brad Ausmus"
+			},
+			"division": {
+				"name": "American League Central"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Detroit Tigers",
+			"team_stats": [
+				{
+					"losses": 88,
+					"season": "2008 Major League Baseball season",
+					"wins": 74
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Minute Maid Park"
+				},
+				{
+					"name": "Reliant Astrodome"
+				},
+				{
+					"name": "Osceola County Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1962"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/junction_jack",
+					"name": "Junction Jack",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Bo Porter"
+			},
+			"division": {
+				"name": "American League West"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Houston Astros",
+			"team_stats": [
+				{
+					"losses": 75,
+					"season": "2008 Major League Baseball season",
+					"wins": 86
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Kauffman Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1969"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/sluggerrr",
+					"name": "Sluggerrr",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Ned Yost"
+			},
+			"division": {
+				"name": "American League Central"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Kansas City Royals",
+			"team_stats": [
+				{
+					"losses": 87,
+					"season": "2008 Major League Baseball season",
+					"wins": 75
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Angel Stadium of Anaheim"
+				},
+				{
+					"name": "Dodger Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1966"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/rally_monkey",
+					"name": "Rally Monkey",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Mike Scioscia"
+			},
+			"division": {
+				"name": "American League West"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Los Angeles Angels of Anaheim",
+			"team_stats": [
+				{
+					"losses": 62,
+					"season": "2008 Major League Baseball season",
+					"wins": 100
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [
+				{
+					"id": "/m/052w704",
+					"timestamp": "2009-01-02T21:22:09.0000Z"
+				}
+			],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Dodger Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1883"
+				}
+			],
+			"/sports/sports_team/team_mascot": [],
+			"current_manager": {
+				"name": "Don Mattingly"
+			},
+			"division": {
+				"name": "National League West"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Los Angeles Dodgers",
+			"team_stats": [
+				{
+					"losses": 78,
+					"season": "2008 Major League Baseball season",
+					"wins": 84
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Marlins Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1993"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/wikipedia/en_title/Billy_the_Marlin",
+					"name": "Billy the Marlin",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Mike Redmond"
+			},
+			"division": {
+				"name": "National League East"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Miami Marlins",
+			"team_stats": [
+				{
+					"losses": 77,
+					"season": "2008 Major League Baseball season",
+					"wins": 84
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Miller Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1970"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/bonnie_brewer",
+					"name": "Bonnie Brewer",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/en/bernie_brewer",
+					"name": "Bernie Brewer",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Ron Roenicke"
+			},
+			"division": {
+				"name": "National League Central"
+			},
+			"league": {
+				"name": "Major League Baseball"
+			},
+			"name": "Milwaukee Brewers",
+			"team_stats": [
+				{
+					"losses": 72,
+					"season": "2008 Major League Baseball season",
+					"wins": 90
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Target Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1961"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/07vb7g",
+					"name": "T.C. Bear",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Ron Gardenhire"
+			},
+			"division": {
+				"name": "American League Central"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Minnesota Twins",
+			"team_stats": [
+				{
+					"losses": 75,
+					"season": "2008 Major League Baseball season",
+					"wins": 88
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [
+				{
+					"id": "/wikipedia/images/commons_id/3269938",
+					"timestamp": "2008-10-28T05:13:20.0000Z"
+				}
+			],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Citi Field"
+				},
+				{
+					"name": "MCU Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1962"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/mr_met",
+					"name": "Mr. Met",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/en/lady_met",
+					"name": "Lady Met",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Terry Collins"
+			},
+			"division": {
+				"name": "National League East"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "New York Mets",
+			"team_stats": [
+				{
+					"losses": 73,
+					"season": "2008 Major League Baseball season",
+					"wins": 89
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [
+				{
+					"id": "/m/0j54rvj",
+					"timestamp": "2012-03-19T14:33:27.0000Z"
+				}
+			],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Yankee Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1901"
+				}
+			],
+			"/sports/sports_team/team_mascot": [],
+			"current_manager": {
+				"name": "Joe Girardi"
+			},
+			"division": {
+				"name": "American League East"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "New York Yankees",
+			"team_stats": [
+				{
+					"losses": 73,
+					"season": "2008 Major League Baseball season",
+					"wins": 89
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Oakland-Alameda County Coliseum"
+				},
+				{
+					"name": "Cisco Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1901"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/stomper",
+					"name": "Stomper",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Bob Melvin"
+			},
+			"division": {
+				"name": "American League West"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Oakland Athletics",
+			"team_stats": [
+				{
+					"losses": 86,
+					"season": "2008 Major League Baseball season",
+					"wins": 75
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Citizens Bank Park"
+				},
+				{
+					"name": "Bright House Field"
+				},
+				{
+					"name": "Baker Bowl"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1883"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/phillie_phanatic",
+					"name": "Phillie Phanatic",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Ryne Sandberg"
+			},
+			"division": {
+				"name": "National League East"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Philadelphia Phillies",
+			"team_stats": [
+				{
+					"losses": 70,
+					"season": "2008 Major League Baseball season",
+					"wins": 92
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "PNC Park"
+				},
+				{
+					"name": "McKechnie Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1891"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/pirate_parrot",
+					"name": "Pirate Parrot",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/wikipedia/en_title/Buccaneer_$0028baseball_mascot$0029",
+					"name": "Buccaneer",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Clint Hurdle"
+			},
+			"division": {
+				"name": "National League Central"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Pittsburgh Pirates",
+			"team_stats": [
+				{
+					"losses": 105,
+					"season": "2010 Major League Baseball season",
+					"wins": 57
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Petco Park"
+				},
+				{
+					"name": "Peoria Sports Complex"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1969"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/swinging_friar",
+					"name": "Swinging Friar",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Bud Black"
+			},
+			"division": {
+				"name": "National League West"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "San Diego Padres",
+			"team_stats": [
+				{
+					"losses": 99,
+					"season": "2008 Major League Baseball season",
+					"wins": 63
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "AT&amp;T Park"
+				},
+				{
+					"name": "Candlestick Park"
+				},
+				{
+					"name": "Seals Stadium"
+				},
+				{
+					"name": "St. George Cricket Grounds"
+				},
+				{
+					"name": "Polo Grounds"
+				},
+				{
+					"name": "Hilltop Park"
+				},
+				{
+					"name": "Polo Grounds II"
+				},
+				{
+					"name": "Polo Grounds III"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1958"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/crazy_crab",
+					"name": "Crazy Crab",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/en/lou_seal",
+					"name": "Lou Seal",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Bruce Bochy"
+			},
+			"division": {
+				"name": "National League West"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "San Francisco Giants",
+			"team_stats": [
+				{
+					"losses": 70,
+					"season": "2010 Major League Baseball season",
+					"wins": 92
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Safeco Field"
+				},
+				{
+					"name": "Kingdome"
+				},
+				{
+					"name": "Peoria Sports Complex"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1977"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/mariner_moose",
+					"name": "Mariner Moose",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Eric Wedge"
+			},
+			"division": {
+				"name": "American League West"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Seattle Mariners",
+			"team_stats": [
+				{
+					"losses": 101,
+					"season": "2008 Major League Baseball season",
+					"wins": 61
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Busch Stadium"
+				},
+				{
+					"name": "Roger Dean Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1882"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/fredbird",
+					"name": "Fredbird",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Mike Matheny"
+			},
+			"division": {
+				"name": "National League Central"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "St. Louis Cardinals",
+			"team_stats": [
+				{
+					"losses": 76,
+					"season": "2008 Major League Baseball season",
+					"wins": 86
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Tropicana Field"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1998"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/m/04xh7h0",
+					"name": "Raymond",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Joe Maddon"
+			},
+			"division": {
+				"name": "American League East"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Tampa Bay Rays",
+			"team_stats": [
+				{
+					"losses": 65,
+					"season": "2008 Major League Baseball season",
+					"wins": 97
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Rangers Ballpark in Arlington"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1972"
+				}
+			],
+			"/sports/sports_team/team_mascot": [],
+			"current_manager": {
+				"name": "Ron Washington"
+			},
+			"division": {
+				"name": "American League West"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Texas Rangers",
+			"team_stats": [
+				{
+					"losses": 83,
+					"season": "2008 Major League Baseball season",
+					"wins": 79
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Rogers Centre"
+				},
+				{
+					"name": "Exhibition Stadium"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "1977"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/bj_birdie",
+					"name": "BJ Birdy",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				},
+				{
+					"id": "/m/0v0mw33",
+					"name": "Ace",
+					"type": [
+						"/sports/mascot",
+						"/common/topic"
+					]
+				},
+				{
+					"id": "/m/0v0mw6n",
+					"name": "Diamond",
+					"type": [
+						"/sports/mascot",
+						"/common/topic"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "John Gibbons"
+			},
+			"division": {
+				"name": "American League East"
+			},
+			"league": {
+				"name": "American League"
+			},
+			"name": "Toronto Blue Jays",
+			"team_stats": [
+				{
+					"losses": 76,
+					"season": "2008 Major League Baseball season",
+					"wins": 86
+				}
+			],
+			"type": "/baseball/baseball_team"
+		},
+		{
+			"/common/topic/image": [
+				{
+					"id": "/wikipedia/images/commons_id/4157608",
+					"timestamp": "2009-03-20T06:37:19.0000Z"
+				}
+			],
+			"/sports/sports_team/arena_stadium": [
+				{
+					"name": "Nationals Park"
+				}
+			],
+			"/sports/sports_team/founded": [
+				{
+					"value": "2005"
+				}
+			],
+			"/sports/sports_team/team_mascot": [
+				{
+					"id": "/en/screech",
+					"name": "Screech",
+					"type": [
+						"/common/topic",
+						"/sports/mascot"
+					]
+				}
+			],
+			"current_manager": {
+				"name": "Davey Johnson"
+			},
+			"division": {
+				"name": "National League East"
+			},
+			"league": {
+				"name": "National League"
+			},
+			"name": "Washington Nationals",
+			"team_stats": [
+				{
+					"losses": 103,
+					"season": "2009 Major League Baseball season",
+					"wins": 59
+				}
+			],
+			"type": "/baseball/baseball_team"
+		}
+	]
+}

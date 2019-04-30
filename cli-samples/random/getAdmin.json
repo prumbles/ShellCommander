@@ -1,0 +1,17 @@
+{
+    "name" : "Admin",
+    "age" : 36,
+    "rights" : [
+        {"roleName" : "admin", "roleIds" : [1,2,3] },
+        {"roleName" : "editor", "roleIds" : [4,5,6] },
+        {"roleName" : "contributor", "roleIds" : [7,8,9]}
+    ],
+    "activity" : [
+        {"name" : "logged in", "time": "4/20/2019 9:00 AM"},
+        {"name" : "changed password", "time": "4/20/2019 9:04 AM"},
+        {"name" : "added user", "time": "4/20/2019 10:20 AM"},
+        {"name" : "logged out", "time": "4/20/2019 5:02 PM"},
+        {"name" : "logged in", "time": "4/21/2019 9:01 AM"},
+        {"name" : "logged out", "time": "4/21/2019 4:50 PM"}
+    ]
+} 

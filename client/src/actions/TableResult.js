@@ -24,6 +24,11 @@ const styles = theme => ({
   },
   clickable: {
     cursor: 'pointer'
+  },
+  row: {
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.background.default,
+    },
   }
 });
 
@@ -109,7 +114,7 @@ class TableResult extends React.Component {
       }
 
       rowComps.push(
-        <TableRow key={row._id}>
+        <TableRow className={classes.row} key={row._id}>
             {cells}
         </TableRow>
       )

@@ -24,7 +24,7 @@ const defaultConfig = {
     ],
     tabs: [
         {
-            text: 'General Bash Commands',
+            text: 'Sample Bash Commands',
             items: [
                 {
                     text: 'ls',
@@ -33,29 +33,73 @@ const defaultConfig = {
                 {
                     text: 'ls Plus',
                     action: 'lsPlus'
+                },
+                {
+                    text: 'top',
+                    action: 'top'
+                },
+                {
+                    text: 'top (Enhanced)',
+                    action: 'topEnhanced'
                 }
             ]
         },
         {
-            text: 'AWS CLI (JSON Response)',
+            text: 'AWS CLI-style commands',
             items: [
                 {
                     text: 'DynamoDB - Get list of songs',
                     action: 'songs'
                 }
             ]
+        },
+        {
+            text: 'Random',
+            items: [
+                {
+                    text: 'MLB Data',
+                    action: 'mlbData'
+                },
+                {
+                    text: 'Admin Information',
+                    action: 'getAdmin'
+                }
+            ]
         }
     ],
     actions: {
+        "process": {
+            text: "Process {{pid}}",
+            shell: `
+                ps -Flww -p {{pid}}
+            `,
+            type: 'raw'
+        },
+        "top": {
+            text: 'Resource Usage',
+            shell: `
+                top -b -n1
+            `,
+            type: 'raw'
+        },
+        "topEnhanced": {
+            text: "Resource Usage",
+            shell: `
+                top -b -n1 | grep 'PID USER' -A 200
+            `,
+            delimiter: "\\s+",
+            variables: [_N,'pid',_N,_N,_N,_N,_N,_N,_N,_N,_N,_N],
+            clicks: [_N,'process',_N,_N,_N,_N,_N,_N,_N,_N,_N,_N]
+        },
         "catFromLs": {
             text: '{{filename}}',
             shell: `
-            path="{{path}}"
+                path="{{path}}"
 
-            if [ -z $path ]; then
-                path="./"
-            fi
-            cat \${path}/"{{filename}}"
+                if [ -z $path ]; then
+                    path="./"
+                fi
+                cat \${path}/"{{filename}}"
             `,
             type: 'raw'
         },
@@ -102,6 +146,41 @@ const defaultConfig = {
                 cat "cli-samples/text/{{artist}}.txt"
             `,
             type: 'raw'
+        },
+        "mlbData" : {
+            text: 'MLB Data',
+            shell: `
+                cat cli-samples/random/mlb.json
+            `,
+            type: 'json',
+            arrays: {
+                "result": { 
+                    clicks: {
+                        'name': 'teamWiki'
+                    },
+                    variables: {
+                        'team': 'name'
+                    },
+                    omit: ['/common/topic/image','type','/sports/sports_team/team_mascot']
+                }
+            }
+        },
+        "teamWiki" : {
+            text: '',
+            url: 'https://en.wikipedia.org/wiki/{{team}}',
+            type: 'url'
+        },
+        "getAdmin" : {
+            text: 'Admin info',
+            shell: `
+                cat cli-samples/random/getAdmin.json
+            `,
+            type: 'json',
+            omit: ['age'],
+            arrays: {
+                "rights": { },
+                "activity": { }
+            }
         }
     }
 };

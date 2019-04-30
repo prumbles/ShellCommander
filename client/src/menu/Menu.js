@@ -11,6 +11,12 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
+import Dialog from '@material-ui/core/Dialog';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
 
 const styles = theme => ({
   root: {
@@ -56,14 +62,54 @@ const styles = theme => ({
   },
   selectIcon: {
     fill: '#fff'
+  },
+  dialogAppBar: {
+    position: 'relative'
+  },
+  configTextfield: {
+    width: '100%'
   }
 });
+
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
 
 class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
-    mobileMoreAnchorEl: null
+    mobileMoreAnchorEl: null,
+    settingsOpen: false,
+    configurationJSON: ''
   };
+
+  handleSettingsClose = () => {
+    this.setState({
+      settingsOpen: false
+    })
+  }
+
+  handleSettingsSave = () => {
+    configurationStore.updateConfiguration(
+      JSON.parse(this.state.configurationJSON)
+    )
+    this.setState({
+      settingsOpen: false
+    })
+  }
+
+  handleSettingsOpen = () => {
+    this.setState({
+      settingsOpen: true,
+      configurationJSON: JSON.stringify(configurationStore.configuration, null, '\t')
+    })
+  }
+
+  handleConfigChange = (event) => {
+    this.setState({
+      configurationJSON: event.target.value
+    })
+  }
 
   handleContextChange = (event) => {
     configurationStore.selectContextByText(event.target.value)
@@ -85,6 +131,33 @@ class PrimarySearchAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
+      <Dialog
+          fullScreen
+          open={this.state.settingsOpen}
+          onClose={this.handleSettingsClose}
+          TransitionComponent={Transition}
+        >
+          <AppBar className={classes.dialogAppBar}>
+            <Toolbar>
+              <IconButton color="inherit" onClick={this.handleSettingsClose} aria-label="Close">
+                <CloseIcon />
+              </IconButton>
+              <Button color="inherit" onClick={this.handleSettingsSave}>
+                save
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <div>
+          <TextField
+            label="JSON Configuration"
+            className={classes.configTextfield}
+            multiline
+            value={this.state.configurationJSON}
+            onChange={this.handleConfigChange}
+            margin="normal"
+          />
+          </div>
+        </Dialog>
         <AppBar position="static" color="primary">
           <Toolbar variant="dense">
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
@@ -106,7 +179,7 @@ class PrimarySearchAppBar extends React.Component {
                   })}
                 </Select>
               </FormControl>
-              <IconButton color="inherit">
+              <IconButton color="inherit" onClick={this.handleSettingsOpen}>
                 <SettingsIcon />
               </IconButton>
             </div>

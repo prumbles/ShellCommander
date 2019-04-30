@@ -131,6 +131,11 @@ class configurationStore extends store {
             action = this._configuration.actions[action.action]
         }
 
+        if (action.type === 'url') {
+            window.open(this._replaceVariablesInText(variables || [], action.url))
+            return
+        }
+
         let actionChainItem = {
             _id: 'chainItem' + this._actionChain.length,
             action: action,
@@ -221,7 +226,7 @@ class configurationStore extends store {
 
                 let responseValue = resp.text
 
-                if (actionForShellExec.type === 'json') {
+                if (!resp.error && actionForShellExec.type === 'json') {
                     responseValue = JSON.parse(resp.text)
 
                     if (Array.isArray(responseValue)) {
@@ -276,6 +281,7 @@ class configurationStore extends store {
             ? this._configuration.tabs[0] : null
 
         this._selectedAction = null
+        this._actionResponse = null
 
         this._clearVariables()
 

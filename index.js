@@ -22,7 +22,7 @@ app.post('/api/shell', (req,res) => {
             console.log('Program stderr:', stderr);
 
             var resp = {
-                error: stderr
+                error: (stderr.trim() === '') ? 'Unknown error' : stderr
             };
 
             res.json(resp);
