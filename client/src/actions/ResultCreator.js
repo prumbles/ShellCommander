@@ -36,6 +36,13 @@ class ResultCreator {
                 ind++
                 let isGrid = Array.isArray(val)
 
+                //set isGrid to false if it is an array of primitives
+                if (isGrid) {
+                    if (val.length === 0 || (typeof val[0] !== 'object')) {
+                        isGrid = false
+                    }
+                }
+
                 if (isGrid && renderGrids) {
                     elements.push(this._getJsonArrayGrid(action, val, k, 'arrayGrid' + ind.toString()))
                 } else if (!isGrid && !renderGrids) {
@@ -114,7 +121,7 @@ class ResultCreator {
     }
 
     static _getAddedColumnData(arrConfig) {
-        if (arrConfig.add) {
+        if (arrConfig && arrConfig.add) {
             let data = []
             //Add the columns from the "add" parameter
             Object.keys(arrConfig.add).forEach((k) => {
@@ -136,7 +143,7 @@ class ResultCreator {
     }
 
     static _getJsonArrayGrid = (action, rows, arrayName, gridKey) => {
-        let arrConfig = action.arrays[arrayName]
+        let arrConfig = action.arrays ? action.arrays[arrayName] : null
 
         let data = {
             headers: [],
@@ -155,11 +162,11 @@ class ResultCreator {
 
         if (rows.length > 0) {
             let headerInd = 0
-            let omitMap = ResultCreator._getOmitMap(arrConfig.omit)
+            let omitMap = ResultCreator._getOmitMap(arrConfig ? arrConfig.omit : null)
             
             if (!omitMap['*']) { //if we have a * indicating to omit all columns, then skip all
                 Object.keys(rows[0]).forEach((k) => {
-                    if (arrConfig && !omitMap[k]) {
+                    if (!omitMap[k]) {
                         data.headers.push({
                             text: k
                         })

@@ -43,33 +43,45 @@ class Action extends React.Component {
     this.setState(this.state)
   }
 
+  _fixActionOnChange = (isPrevious) => {
+    let action = configurationStore.selectedAction
+    if (action) {
+        if (this._actionRequiresInput(action)) {
+            let inputValues = []
+            action.inputs.forEach(i => {
+                inputValues.push({
+                    text: i,
+                    value: ''
+                })
+            })
+
+            this.setState({inputValues: inputValues})
+        } else {
+            this.setState({inputValues: []})
+            if (!isPrevious) {
+              configurationStore.runSelectedAction()
+            }
+        }
+    } else {
+      this.setState({inputValues: []})
+    }
+  }
+
   componentDidMount() {
     configurationStore.registerStoreChange(this, [
         {
             event: 'selectedAction', 
             callback: () => {
-                let action = configurationStore.selectedAction
-                if (action) {
-                    if (this._actionRequiresInput(action)) {
-                        let inputValues = []
-                        action.inputs.forEach(i => {
-                            inputValues.push({
-                                text: i,
-                                value: ''
-                            })
-                        })
-
-                        this.setState({inputValues: inputValues})
-                    } else {
-                        this.setState({inputValues: []})
-                        configurationStore.runSelectedAction()
-                    }
-                } else {
-                  this.setState({inputValues: []})
-                }
+                this._fixActionOnChange(false)
             }
         }, 
-        'actionResponse'
+        'actionResponse',
+        {
+            event: 'selectedPreviousAction',
+            callback: () => {
+              this._fixActionOnChange(true)
+            }
+        }
     ]);
   }
 

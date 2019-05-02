@@ -16,11 +16,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 
 const styles = theme => ({
   root: {
     width: '100%',
+    position: 'relative'
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -68,6 +70,21 @@ const styles = theme => ({
   },
   configTextfield: {
     width: '100%'
+  },
+  loadingHolder: {
+    position:'absolute',
+    bottom: '0px',
+    width:'100%',
+    height: 3
+  },
+  screen: {
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(100,100,100,.1)',
+    zIndex: 10000
   }
 });
 
@@ -116,7 +133,7 @@ class PrimarySearchAppBar extends React.Component {
   }
 
   componentDidMount() {
-    configurationStore.registerStoreChange(this, ['context', 'configuration']);
+    configurationStore.registerStoreChange(this, ['context', 'configuration', 'loading']);
   }
 
   componentWillUnmount() {
@@ -131,6 +148,11 @@ class PrimarySearchAppBar extends React.Component {
 
     return (
       <div className={classes.root}>
+      {configurationStore.loading &&
+          <div className={classes.screen}>
+          
+          </div>
+        }
       <Dialog
           fullScreen
           open={this.state.settingsOpen}
@@ -185,6 +207,11 @@ class PrimarySearchAppBar extends React.Component {
             </div>
           </Toolbar>
         </AppBar>
+        {configurationStore.loading &&
+          <div className={classes.loadingHolder}>
+          <LinearProgress />
+          </div>
+        }
       </div>
     );
   }

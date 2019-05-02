@@ -38,6 +38,10 @@ class configurationStore extends store {
         return this._actionChain
     }
 
+    get loading() {
+        return this._loading
+    }
+
     updateConfiguration = (config) => {
         this._data.set(config)
         this._configuration = this._data.getConfig()
@@ -116,7 +120,7 @@ class configurationStore extends store {
                 this._actionResponse = chainItem.response
                 this._emitChange('actionResponse')
                 this._selectedAction = chainItem.action
-                this._emitChange('selectedAction')
+                this._emitChange('selectedPreviousAction')
                 return
             }
 
