@@ -49,9 +49,18 @@ class Action extends React.Component {
         if (this._actionRequiresInput(action)) {
             let inputValues = []
             action.inputs.forEach(i => {
+                let eqIndex = i.indexOf('=')
+                let txt = i
+                let val = ''
+
+                if (eqIndex > 0) {
+                  txt = i.substr(0, eqIndex)
+                  val = i.substr(eqIndex + 1)
+                }
+
                 inputValues.push({
-                    text: i,
-                    value: ''
+                    text: txt,
+                    value: val
                 })
             })
 

@@ -82,6 +82,7 @@ const defaultConfig = {
                 top -b -n1 | grep 'PID USER' -A 200
             `,
             delimiter: "\\s+",
+            hasHeaders: true,
             variables: [_N,'pid',_N,_N,_N,_N,_N,_N,_N,_N,_N,_N],
             clicks: [_N,'process',_N,_N,_N,_N,_N,_N,_N,_N,_N,_N]
         },
@@ -109,7 +110,7 @@ const defaultConfig = {
         },
         "lsPlus": {
             text: 'ls',
-            inputs: ['path'],
+            inputs: ['path=cli-samples/text/'],
             shell: `
                 ls -ltra {{path}}
             `,

@@ -35,7 +35,7 @@ class ResultCreator {
 
         [false,true].forEach(renderGrids => {
             let responseBaseVariables = Query.getObjectVariables(actionResponse.value)
-            Object.keys(actionResponse.value).forEach(k => {
+            Object.keys(actionResponse.value).sort().forEach(k => {
                 let val = actionResponse.value[k]
                 ind++
                 let isGrid = Array.isArray(val)
@@ -210,20 +210,29 @@ class ResultCreator {
 
         let delimiter = action.delimiter ? new RegExp(action.delimiter) : null
         let id = 0
-        actionResponse.value.split('\n').forEach(row => {
-
-            let formattedRow = {
-                _id: 'row' + id++,
-                values: []
-            }
+        actionResponse.value.split('\n').forEach((row, rowIndex) => {
+            let rowValues = []
 
             if (delimiter) {
-                formattedRow.values = row.split(delimiter)
+                rowValues = row.split(delimiter)
             } else {
-                formattedRow.values = [row]
+                rowValues = [row]
             }
 
-            data.rows.push(formattedRow)
+            if (rowIndex === 0 && action.hasHeaders) {
+                data.headers = rowValues.map(rv => {
+                    return {text: rv}
+                })
+            } else {
+                let formattedRow = {
+                    _id: 'row' + id++,
+                    values: []
+                }                
+    
+                data.rows.push(formattedRow)
+
+                formattedRow.values = rowValues
+            }
         })
 
         return <TableResult data={data}></TableResult>
