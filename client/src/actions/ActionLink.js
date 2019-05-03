@@ -27,7 +27,7 @@ class ActionLink extends React.Component {
             isMenuOpen: true
         })
     } else {
-        configurationStore.selectNextAction(this.props.variables, this.props.nextActionName)
+        configurationStore.selectNextAction(this._addClickVariable(this.props.variables), this.props.nextActionName)
     }
   }
 
@@ -35,7 +35,35 @@ class ActionLink extends React.Component {
     this.setState({
         isMenuOpen: false
     })
-    configurationStore.selectNextAction(this.props.variables, actionName)
+    configurationStore.selectNextAction(this._addClickVariable(this.props.variables), actionName)
+  }
+
+  _addClickVariable = (variables) => {
+    let v = this._getClickVariable()
+
+    if (v) {
+      variables.push(v)
+    }
+
+    return variables
+  }
+
+  _getClickVariable = () => {
+    if (this.props.clickVariableAlias && this.props.clickVariableAlias.indexOf('=') > 0) {
+      let parts = this.props.clickVariableAlias.split('=')
+      let existingVariable = this.props.variables.find(v => {
+        return v.text === parts[1] 
+      })
+
+      if (existingVariable) {
+        return {
+          text: parts[0],
+          value: existingVariable.value
+        }
+      }
+    }
+
+    return null
   }
 
   getAnchorEl = () => {

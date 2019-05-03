@@ -99,6 +99,8 @@ class TableResult extends React.Component {
         variables = this._getJsonRowVariables(rowIndex)
       }
 
+      let clickVariableAliases = data.clickVariableAliases || []
+
       for (let i=0;i<dataInfo.colCnt;i++) {
         let txt = ''
         if (i < row.values.length) {
@@ -114,7 +116,10 @@ class TableResult extends React.Component {
           } else {
             nextActionName = data.action.clicks[i]
           }
-          txt = <ActionLink variables={variables} nextActionName={nextActionName}>{txt}</ActionLink>
+
+          let alias = clickVariableAliases[i]
+
+          txt = <ActionLink variables={variables} clickVariableAlias={alias}  nextActionName={nextActionName}>{txt}</ActionLink>
         }
 
         cells.push(
