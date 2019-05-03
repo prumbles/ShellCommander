@@ -1,6 +1,7 @@
 import configurationData from '../data/configuration'
 import store from './store'
 import data from '../data/data'
+import StringUtils from '../utils/StringUtils'
 
 class configurationStore extends store {
     constructor() {
@@ -105,15 +106,6 @@ class configurationStore extends store {
         this._selectAction(nextAction, variables)
     }
 
-    _replaceVariablesInText = (variables, text) => {
-        variables.forEach(v => {
-            text = text.split("{{" + v.text + "}}").join(v.value)
-        })
-
-        return text
-    }
-
-
     selectPreviousAction = (chainItem) => {
         for (let i=this._actionChain.length-1; i>=0; i--) {
             if (chainItem === this._actionChain[i]) {
@@ -136,7 +128,7 @@ class configurationStore extends store {
         }
 
         if (action.type === 'url') {
-            window.open(this._replaceVariablesInText(variables || [], action.url))
+            window.open(StringUtils.replaceVariablesInText(variables || [], action.url))
             return
         }
 
@@ -146,7 +138,7 @@ class configurationStore extends store {
             response: null,
             variables: variables || [],
             inputVariables: [],
-            text: this._replaceVariablesInText(variables || [], action.text)
+            text: StringUtils.replaceVariablesInText(variables || [], action.text)
         }
         
         this._actionChain.push(actionChainItem)   
@@ -221,8 +213,8 @@ class configurationStore extends store {
                 })
             }
 
-            actionForShellExec.shell = this._replaceVariablesInText(allVariables, actionForShellExec.shell)
-            chainItem.text = this._replaceVariablesInText(allVariables, action.text)
+            actionForShellExec.shell = StringUtils.replaceVariablesInText(allVariables, actionForShellExec.shell)
+            chainItem.text = StringUtils.replaceVariablesInText(allVariables, action.text)
             
             this._loading = true
             this._emitChange('loading')

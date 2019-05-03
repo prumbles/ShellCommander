@@ -9,8 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography';
-import configurationStore from '../store/configurationStore'
-import ResultCreator from './ResultCreator';
+import StringUtils from '../utils/StringUtils'
+import Query from '../utils/ObjectQuery'
+import ActionLink from './ActionLink'
 
 const styles = theme => ({
   root: {
@@ -34,41 +35,40 @@ const styles = theme => ({
 
 class TableResult extends React.Component {
 
-  cellClick = (row, rowIndex, columnIndex, e) => {
-    e.preventDefault()
+  _getJsonRowVariables = (rowIndex) => {
     let data = this.props.data
     let prev = data.action
     let variables = []
 
-    if (prev.inputs) {
+    let arrayData = prev.arrays[data.arrayName]
 
+    if (arrayData.variables) {
+      Object.keys(arrayData.variables).forEach(key => {
+        variables.push({
+          text: key,
+          value: StringUtils.anyToString(Query.find(data.rawRows[rowIndex], arrayData.variables[key]))
+        })
+      })
     }
 
-    if (prev.variables) {
-      prev.variables.forEach((v,i) => {
-        if (v) {
-          variables.push({
-            text: v,
-            value: row.values[i]
-          })
-        }
-      })
-      configurationStore.selectNextAction(variables, prev.clicks[columnIndex])
-    } else if (prev.arrays && prev.arrays[data.arrayName]) {
-      let arrayData = prev.arrays[data.arrayName]
+    return variables
+  }
 
-      if (arrayData.variables) {
-        Object.keys(arrayData.variables).forEach(key => {
-          variables.push({
-            text: key,
-            value: ResultCreator._safeToString(ResultCreator._queryObject(data.rawRows[rowIndex], arrayData.variables[key]))
-          })
+  _getNonJsonRowVariables = (row) => {
+    let data = this.props.data
+    let prev = data.action
+    let variables = []
+
+    prev.variables.forEach((v,i) => {
+      if (v) {
+        variables.push({
+          text: v,
+          value: row.values[i]
         })
       }
+    })
 
-      configurationStore.selectNextAction(variables, data.clicks[columnIndex])
-    }
-    
+    return variables
   }
 
   render() {
@@ -92,6 +92,13 @@ class TableResult extends React.Component {
     data.rows.forEach((row, rowIndex) => {
       let cells = []
 
+      let variables = []
+      if (data.action.type !== 'json' && data.action.variables) {
+        variables = this._getNonJsonRowVariables(row)
+      } else if (data.action.arrays && data.action.arrays[data.arrayName]) {
+        variables = this._getJsonRowVariables(rowIndex)
+      }
+
       for (let i=0;i<dataInfo.colCnt;i++) {
         let txt = ''
         if (i < row.values.length) {
@@ -101,9 +108,13 @@ class TableResult extends React.Component {
         }
 
         if (data.clicks && data.clicks[i]) {
-          txt = <a className={classes.clickable} href="#/" onClick={(e) => this.cellClick(row, rowIndex, i, e)}>
-            <span>{txt}</span>
-          </a>
+          let nextActionName = ''
+          if (data.action.type === 'json') {
+            nextActionName = data.clicks[i]
+          } else {
+            nextActionName = data.action.clicks[i]
+          }
+          txt = <ActionLink variables={variables} nextActionName={nextActionName}>{txt}</ActionLink>
         }
 
         cells.push(

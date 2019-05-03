@@ -1,6 +1,9 @@
 import React from 'react';
 import TableResult from './TableResult'
 import Typography from '@material-ui/core/Typography';
+import StringUtils from '../utils/StringUtils'
+import Query from '../utils/ObjectQuery'
+import ActionLink from './ActionLink'
 
 const styles = {
     metaCont: {
@@ -31,6 +34,7 @@ class ResultCreator {
         let ind = 0;
 
         [false,true].forEach(renderGrids => {
+            let responseBaseVariables = Query.getObjectVariables(actionResponse.value)
             Object.keys(actionResponse.value).forEach(k => {
                 let val = actionResponse.value[k]
                 ind++
@@ -49,9 +53,18 @@ class ResultCreator {
                     let omitMap = ResultCreator._getOmitMap(action.omit)
 
                     if (!omitMap[k]) {
-                        let convertedVal = ResultCreator._safeToString(val)
-                        elements.push(<div style={styles.metaCont} key={'plainval' + ind.toString()}>
-                            <Typography color="secondary" inline={true} variant="subheading" style={styles.meta}>{k}</Typography><Typography color="textPrimary" inline={true} variant="body1">{convertedVal}</Typography>
+                        let convertedVal = StringUtils.anyToString(val)
+                        let key = 'plainval' + ind.toString()
+                        let valueObject = null
+                        if (action.clicks && action.clicks[k]) {
+                            valueObject = <ActionLink style={styles.metaCont} variables={responseBaseVariables} nextActionName={action.clicks[k]}>{convertedVal}</ActionLink>
+                        } else {
+                            valueObject = <Typography  style={styles.metaCont} color="textPrimary" inline={true} variant="body1">{convertedVal}</Typography>
+                        }
+
+                        elements.push(<div style={styles.metaCont} key={key}>
+                                <Typography color="secondary" inline={true} variant="subheading" style={styles.meta}>{k}</Typography>
+                                {valueObject}
                             </div>)
                     }
                 }
@@ -63,49 +76,10 @@ class ResultCreator {
             </div>
     }
 
-    static _safeToString(x) {
-        switch (typeof x) {
-            case 'object':
-            return JSON.stringify(x)
-            case 'function':
-            return 'function'
-            default:
-            return x + ''
-        }
-    }
-
-    static _isPositiveInteger(s) {
-        return /^\+?[0-9][\d]*$/.test(s);
-    }
-
-    static _queryObject(obj, query) {
-        let items = query.split('.')
-        let ptr = obj
-
-        for (let i=0;i< items.length; i++) {
-            let item = items[i]
-            let next = null
-            if (ResultCreator._isPositiveInteger(item)) {
-                next = ptr[parseInt(item)]
-            } else {
-                next = ptr[item]
-            }
-
-            if ( (typeof next !== 'undefined') && next !== null) {
-                ptr = next
-            } else {
-                return ""
-            }
-        }
-
-        return ptr
-    }
-
-
     static _getRowKeyValue(row, rowKey) {
         let keyValue = row[rowKey]
 
-        return ResultCreator._safeToString(keyValue)
+        return StringUtils.anyToString(keyValue)
     }
 
     static _getOmitMap(omitArray) {
@@ -217,7 +191,7 @@ class ResultCreator {
             })
 
             addedColumns.forEach(c => {
-                formattedRow.values.push(ResultCreator._safeToString(ResultCreator._queryObject(row, c.path)))
+                formattedRow.values.push(StringUtils.anyToString(Query.find(row, c.path)))
             })
 
             data.rows.push(formattedRow)

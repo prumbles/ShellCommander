@@ -197,6 +197,16 @@ const defaultConfig = {
             url: 'https://en.wikipedia.org/wiki/{{manager}}',
             type: 'url'
         },
+        "nameDefinition" : {
+            text: 'Dictionary: {{name}}',
+            url: 'https://www.dictionary.com/browse/{{name}}',
+            type: 'url'
+        },
+        "nameWiki" : {
+            text: 'Wikipedia: {{name}}',
+            url: 'https://en.wikipedia.org/wiki/{{name}}',
+            type: 'url'
+        },
         "getAdmin" : {
             text: 'Admin info',
             shell: `
@@ -204,6 +214,9 @@ const defaultConfig = {
             `,
             type: 'json',
             omit: ['age'],
+            clicks: {
+                'name': 'nameDefinition,nameWiki'
+            },
             arrays: {
                 "rights": { },
                 "activity": { }
