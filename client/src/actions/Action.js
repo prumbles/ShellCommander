@@ -48,21 +48,35 @@ class Action extends React.Component {
     if (action) {
         if (this._actionRequiresInput(action)) {
             let inputValues = []
-            action.inputs.forEach(i => {
-                let eqIndex = i.indexOf('=')
-                let txt = i
-                let val = ''
+            if (isPrevious) {
+              let chainItem = configurationStore.getActionChainItem(action)
 
-                if (eqIndex > 0) {
-                  txt = i.substr(0, eqIndex)
-                  val = i.substr(eqIndex + 1)
-                }
-
-                inputValues.push({
-                    text: txt,
-                    value: val
+              if (chainItem && chainItem.inputVariables) {
+                chainItem.inputVariables.forEach(iv => {
+                  inputValues.push({
+                      text: iv.text,
+                      value: iv.value
+                  })
                 })
-            })
+              }
+
+            } else {
+              action.inputs.forEach(i => {
+                  let eqIndex = i.indexOf('=')
+                  let txt = i
+                  let val = ''
+
+                  if (eqIndex > 0) {
+                    txt = i.substr(0, eqIndex)
+                    val = i.substr(eqIndex + 1)
+                  }
+
+                  inputValues.push({
+                      text: txt,
+                      value: val
+                  })
+              })
+            }
 
             this.setState({inputValues: inputValues})
         } else {

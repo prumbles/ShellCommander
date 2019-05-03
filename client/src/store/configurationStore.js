@@ -174,7 +174,7 @@ class configurationStore extends store {
         let action = this._selectedAction
 
         if (action) {
-            let chainItem = this._getActionChainItem(action)
+            let chainItem = this.getActionChainItem(action)
             let actionForShellExec = this._copyAction(action)
 
             //Get all variables (including the context) and run shell action with replaced variables
@@ -248,7 +248,7 @@ class configurationStore extends store {
         }
     }
 
-    _getActionChainItem = action => {
+    getActionChainItem = action => {
         return this._actionChain.find(c => {
             return c.action === action
         })
