@@ -42,23 +42,31 @@ const styles = theme => ({
 });
 
 class TableResult extends React.Component {
-
-  constructor(props) {
-    super(props)
-
-    this.rows = this.props.data.rows
-  }
-
   state = {
     direction: 'asc',
     orderBy: -1,
     filter: ''
   }
 
-  filter = (e) => {
+  _filterTimeout = null
+
+  _filter = (val) => {
     this.setState({
-      filter: e.target.value
+      filter: val
     })
+  }
+
+  filter = (e) => {
+    let val = e.target.value
+    
+    if (this._filterTimeout) {
+      clearTimeout(this._filterTimeout)
+      this._filterTimeout = null
+    }
+
+    this._filterTimeout = setTimeout(() => {
+      this._filter(val)
+    }, 500)
   }
 
   sort = (ind) => {
@@ -67,7 +75,7 @@ class TableResult extends React.Component {
       dir = (this.state.direction === 'asc') ? 'desc' : 'asc'
     }
 
-    this.rows.sort((r1, r2) => {
+    this.props.data.rows.sort((r1, r2) => {
       if (r1.values[ind] === r2.values[ind]) {
         return 0
       }
@@ -101,7 +109,7 @@ class TableResult extends React.Component {
       Object.keys(arrayData.variables).forEach(key => {
         variables.push({
           text: key,
-          value: StringUtils.anyToString(Query.find(this.rows[rowIndex].rawRow, arrayData.variables[key]))
+          value: StringUtils.anyToString(Query.find(this.props.data.rows[rowIndex].rawRow, arrayData.variables[key]))
         })
       })
     }
@@ -154,7 +162,7 @@ class TableResult extends React.Component {
 
     let rowComps = []
 
-    this.rows.forEach((row, rowIndex) => {
+    this.props.data.rows.forEach((row, rowIndex) => {
       let cells = []
 
       //do filtering
@@ -217,7 +225,8 @@ class TableResult extends React.Component {
           <Typography className={classes.tableTitle} variant="h6">
               {data.arrayName}
           </Typography>
-          <TextField className={classes.filter} onChange={this.filter} value={this.state.filter}></TextField>
+
+          <TextField className={classes.filter} onChange={this.filter}></TextField>
         </div>
       </Toolbar>
         <Table className={classes.table}>
@@ -239,7 +248,7 @@ class TableResult extends React.Component {
   _getDataGridInfo (data) {
     let colCnt = 0
 
-    this.rows.forEach(r => {
+    this.props.data.rows.forEach(r => {
       if (r.values.length > colCnt) {
         colCnt = r.values.length
       }
