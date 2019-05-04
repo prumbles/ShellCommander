@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import StringUtils from '../utils/StringUtils'
 import Query from '../utils/ObjectQuery'
 import ActionLink from './ActionLink'
+import TableSortLabel from '@material-ui/core/TableSortLabel'
 
 const styles = theme => ({
   root: {
@@ -34,6 +35,46 @@ const styles = theme => ({
 });
 
 class TableResult extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.rows = this.props.data.rows
+  }
+
+  state = {
+    direction: 'asc',
+    orderBy: -1
+  }
+
+  sort = (ind) => {
+    let dir = 'asc'
+    if (ind === this.state.orderBy) {
+      dir = (this.state.direction === 'asc') ? 'desc' : 'asc'
+    }
+
+    this.props.data.rows.sort((r1, r2) => {
+      if (r1.values[ind] === r2.values[ind]) {
+        return 0
+      }
+
+      let dirCompare = 'asc'
+      if (r1.values[ind] < r2.values[ind]) {
+        dirCompare = 'desc'
+      }
+
+      if (dir === dirCompare) {
+        return 1
+      }
+
+      return -1
+    })
+
+    this.setState({
+      direction: dir,
+      orderBy: ind
+    })
+  }
 
   _getJsonRowVariables = (rowIndex) => {
     let data = this.props.data
@@ -79,9 +120,17 @@ class TableResult extends React.Component {
 
     if (data.headers) {
       let id = 0
-      data.headers.forEach(h => {
+      data.headers.forEach((h,i) => {
         headerComps.push(
-          <TableCell key={"cell" + id}>{h.text}</TableCell>
+          <TableCell key={"cell" + id}>
+          <TableSortLabel
+            active={this.state.orderBy === i}
+            direction={this.state.direction}
+            onClick={() => {this.sort(i)}}
+          >
+            {h.text}
+          </TableSortLabel>
+          </TableCell>
         )
         id++
       })
