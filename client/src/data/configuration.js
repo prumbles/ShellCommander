@@ -112,7 +112,7 @@ const defaultConfig = {
             text: 'ls',
             inputs: ['path=cli-samples/text/'],
             shell: `
-                ls -ltra {{path}}
+                ls -ltra {{path}} | sed '/^total/d'
             `,
             delimiter: "\\s+",
             variables: [_N,_N,_N,_N,_N,_N,_N,_N,'filename'],
@@ -151,7 +151,7 @@ const defaultConfig = {
             arrays: {
                 "result": { 
                     clicks: {
-                        'name': 'teamWiki'
+                        'name': 'wiki(term=team)'
                     },
                     variables: {
                         'team': 'name',
@@ -159,7 +159,7 @@ const defaultConfig = {
                     },
                     omit: ['/common/topic/image','type','/sports/sports_team/team_mascot'],
                     add: {
-                        'Manager': 'current_manager.name->managerWiki',
+                        'Manager': 'current_manager.name->wiki(term=manager)',
                         'Field': '/sports/sports_team/arena_stadium.1.name'
                     }
                 }
@@ -174,7 +174,7 @@ const defaultConfig = {
             arrays: {
                 "result": { 
                     clicks: {
-                        'name': 'teamWiki'
+                        'name': 'wiki(term=team)'
                     },
                     variables: {
                         'team': 'name',
@@ -182,30 +182,25 @@ const defaultConfig = {
                     },
                     omit: ['*'],
                     add: {
-                        'Manager': 'current_manager.name->managerWiki',
+                        'Manager': 'current_manager.name->wiki(term=manager),search(term=manager)',
                         'Field': '/sports/sports_team/arena_stadium.1.name'
                     }
                 }
             }
         },
-        "teamWiki" : {
-            text: '',
-            url: 'https://en.wikipedia.org/wiki/{{team}}',
+        "wiki" : {
+            text: 'Wikipedia: {{term}}',
+            url: 'https://en.wikipedia.org/wiki/{{term}}',
             type: 'url'
         },
-        "managerWiki" : {
-            text: '',
-            url: 'https://en.wikipedia.org/wiki/{{manager}}',
+        "definition" : {
+            text: 'Dictionary: {{term}}',
+            url: 'https://www.dictionary.com/browse/{{term}}',
             type: 'url'
         },
-        "nameDefinition" : {
-            text: 'Dictionary: {{name}}',
-            url: 'https://www.dictionary.com/browse/{{name}}',
-            type: 'url'
-        },
-        "nameWiki" : {
-            text: 'Wikipedia: {{name}}',
-            url: 'https://en.wikipedia.org/wiki/{{name}}',
+        "search" : {
+            text: 'Search for "{{term}}"',
+            url: 'https://www.google.com/search?q={{term}}',
             type: 'url'
         },
         "getAdmin" : {
@@ -216,7 +211,7 @@ const defaultConfig = {
             type: 'json',
             omit: ['age'],
             clicks: {
-                'name': 'nameDefinition,nameWiki'
+                'name': 'definition(term=name),wiki(term=name)'
             },
             arrays: {
                 "rights": { },

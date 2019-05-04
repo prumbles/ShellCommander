@@ -19,6 +19,16 @@ class ActionLink extends React.Component {
 
   anchorElRef = React.createRef();
 
+  _extractActionName = (fullActionName) => {
+    if (fullActionName.indexOf('(') > 0) {
+      let parts = fullActionName.split('(')
+
+      return parts[0]
+    }
+
+    return fullActionName
+  }
+
   handleClick = event => {
     event.preventDefault()
 
@@ -27,7 +37,8 @@ class ActionLink extends React.Component {
             isMenuOpen: true
         })
     } else {
-        configurationStore.selectNextAction(this._addClickVariable(this.props.variables), this.props.nextActionName)
+        configurationStore.selectNextAction(this._addClickVariables(this.props.variables, this.props.nextActionName), 
+          this._extractActionName(this.props.nextActionName))
     }
   }
 
@@ -35,35 +46,39 @@ class ActionLink extends React.Component {
     this.setState({
         isMenuOpen: false
     })
-    configurationStore.selectNextAction(this._addClickVariable(this.props.variables), actionName)
+    configurationStore.selectNextAction(this._addClickVariables(this.props.variables, actionName), 
+      this._extractActionName(actionName))
   }
 
-  _addClickVariable = (variables) => {
-    let v = this._getClickVariable()
+  _addClickVariables = (variables, fullActionName) => {
+    let v = this._getClickVariables(fullActionName)
 
-    if (v) {
-      variables.push(v)
+    return variables.slice(0).concat(v)
+  }
+
+  _getClickVariables = (fullActionName) => {
+    let variables = []
+
+    let parts = fullActionName.split('(')
+    if (parts.length> 1) {
+      let aliases = parts[1].split(')')[0].split('&') //fullActionName in format of: myAction(var1=othervariable1&var2=othervariable2)
+
+      aliases.forEach(alias => {
+        let aliasPair = alias.split('=')
+        let existingVariable = this.props.variables.find(v => {
+          return v.text === aliasPair[1] 
+        })
+
+        if (existingVariable) {
+          variables.push({
+            text: aliasPair[0],
+            value: existingVariable.value
+          })
+        }
+      })
     }
 
     return variables
-  }
-
-  _getClickVariable = () => {
-    if (this.props.clickVariableAlias && this.props.clickVariableAlias.indexOf('=') > 0) {
-      let parts = this.props.clickVariableAlias.split('=')
-      let existingVariable = this.props.variables.find(v => {
-        return v.text === parts[1] 
-      })
-
-      if (existingVariable) {
-        return {
-          text: parts[0],
-          value: existingVariable.value
-        }
-      }
-    }
-
-    return null
   }
 
   getAnchorEl = () => {
@@ -96,17 +111,26 @@ class ActionLink extends React.Component {
 
         let ind = 0
         let items = []
-        let variables = this.props.variables || []
-        this.state.actions.forEach(a => {
-            ind++
 
+        if (this.state.isMenuOpen) {
+          let variables = this.props.variables
+          
+          this.state.actions.forEach(a => {
+              ind++
+              let actionName = a
 
-            let title = StringUtils.replaceVariablesInText(variables, configurationStore.configuration.actions[a].text || a)
+              if (a.indexOf('(') > 0) {
+                  let clickParts = a.split('(')
+                  actionName = clickParts[0]
+              }
 
-            items.push(
-                <MenuItem key={"clickMenuItem" + ind} onClick={(e) => {this.handleMenuItemClick(e, a)}}>{title}</MenuItem>
-            )
-        })
+              let title = StringUtils.replaceVariablesInText(this._addClickVariables(variables, a), configurationStore.configuration.actions[actionName].text || actionName)
+
+              items.push(
+                  <MenuItem key={"clickMenuItem" + ind} onClick={(e) => {this.handleMenuItemClick(e, a)}}>{title}</MenuItem>
+              )
+          })
+        }
 
         return <div className={classes.hasMenuRoot}>
             {anchorEl}
@@ -128,7 +152,8 @@ class ActionLink extends React.Component {
 
     this.setState({
         isMenu: nextActionNames.length > 1,
-        actions: nextActionNames
+        actions: nextActionNames,
+        variables: this.props.variables || []
     })
   }
 }

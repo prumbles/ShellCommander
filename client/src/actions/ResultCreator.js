@@ -100,24 +100,16 @@ class ResultCreator {
             //Add the columns from the "add" parameter
             Object.keys(arrConfig.add).forEach((k) => {
                 let addParts = arrConfig.add[k].split('->')
-                let alias = null
                 let click = null
 
                 if (addParts.length > 1) {
                     click = addParts[1]
-                    if (click.indexOf('(') > 0) {
-                        //add alias for variable reassignement when cell is clicked
-                        let clickParts = click.split('(')
-                        click = clickParts[0]
-                        alias = clickParts[1].split(')')[0]
-                    }
                 }
 
                 let col = {
                     text: k,
                     path: addParts[0],
-                    click: click,
-                    alias: alias
+                    click: click
                 }
 
                 data.push(col)
@@ -138,8 +130,7 @@ class ResultCreator {
             rawRows: [],
             action: action,
             arrayName: arrayName,
-            clicks:[],
-            clickVariableAliases: []
+            clicks:[]
         }
 
         let id = 0
@@ -179,7 +170,6 @@ class ResultCreator {
                 })
 
                 data.clicks.push(c.click)
-                data.clickVariableAliases.push(c.alias)
             })
         }
 
