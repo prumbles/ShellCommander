@@ -13,6 +13,7 @@ import StringUtils from '../utils/StringUtils'
 import Query from '../utils/ObjectQuery'
 import ActionLink from './ActionLink'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
+import TextField from '@material-ui/core/TextField'
 
 const styles = theme => ({
   root: {
@@ -23,6 +24,12 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  tableTitle: {
+    display: 'inline'
+  },
+  filter: {
+    marginLeft: 10
   },
   clickable: {
     cursor: 'pointer'
@@ -44,7 +51,14 @@ class TableResult extends React.Component {
 
   state = {
     direction: 'asc',
-    orderBy: -1
+    orderBy: -1,
+    filter: ''
+  }
+
+  filter = (e) => {
+    this.setState({
+      filter: e.target.value
+    })
   }
 
   sort = (ind) => {
@@ -53,7 +67,7 @@ class TableResult extends React.Component {
       dir = (this.state.direction === 'asc') ? 'desc' : 'asc'
     }
 
-    this.props.data.rows.sort((r1, r2) => {
+    this.rows.sort((r1, r2) => {
       if (r1.values[ind] === r2.values[ind]) {
         return 0
       }
@@ -87,7 +101,7 @@ class TableResult extends React.Component {
       Object.keys(arrayData.variables).forEach(key => {
         variables.push({
           text: key,
-          value: StringUtils.anyToString(Query.find(data.rawRows[rowIndex], arrayData.variables[key]))
+          value: StringUtils.anyToString(Query.find(this.rows[rowIndex].rawRow, arrayData.variables[key]))
         })
       })
     }
@@ -115,6 +129,8 @@ class TableResult extends React.Component {
   render() {
     const { classes, data } = this.props;
     let dataInfo = this._getDataGridInfo(data)
+    let filterExists = (this.state.filter.trim() !== "")
+    let formattedFilter = this.state.filter.toLowerCase()
 
     let headerComps = []
 
@@ -138,60 +154,70 @@ class TableResult extends React.Component {
 
     let rowComps = []
 
-    data.rows.forEach((row, rowIndex) => {
+    this.rows.forEach((row, rowIndex) => {
       let cells = []
 
-      let variables = []
-      if (data.action.type !== 'json' && data.action.variables) {
-        variables = this._getNonJsonRowVariables(row)
-      } else if (data.action.arrays && data.action.arrays[data.arrayName]) {
-        variables = this._getJsonRowVariables(rowIndex)
-      }
+      //do filtering
+      let showRow = true
+      if (filterExists) {
+        showRow = false
 
-      let clickVariableAliases = data.clickVariableAliases || []
-
-      for (let i=0;i<dataInfo.colCnt;i++) {
-        let txt = ''
-        if (i < row.values.length) {
-          txt = row.values[i]
-        } else {
-          txt = ''
+        if (row.values.find(v => {
+          return v.toLowerCase().indexOf(formattedFilter) >= 0
+        })) {
+          showRow = true
         }
-
-        if (data.clicks && data.clicks[i]) {
-          let nextActionName = ''
-          if (data.action.type === 'json') {
-            nextActionName = data.clicks[i]
+      }
+      
+      if (showRow) {
+        for (let i=0;i<dataInfo.colCnt;i++) {
+          let txt = ''
+          if (i < row.values.length) {
+            txt = row.values[i]
           } else {
-            nextActionName = data.action.clicks[i]
+            txt = ''
           }
 
-          let alias = clickVariableAliases[i]
+          if (data.clicks && data.clicks[i]) {
+            let nextActionName = ''
+            if (data.action.type === 'json') {
+              nextActionName = data.clicks[i]
+            } else {
+              nextActionName = data.action.clicks[i]
+            }
+            
+            let variables = []
+            if (data.action.type !== 'json' && data.action.variables) {
+              variables = this._getNonJsonRowVariables(row)
+            } else if (data.action.arrays && data.action.arrays[data.arrayName]) {
+              variables = this._getJsonRowVariables(rowIndex)
+            }
 
-          txt = <ActionLink variables={variables} clickVariableAlias={alias}  nextActionName={nextActionName}>{txt}</ActionLink>
+            txt = <ActionLink variables={variables}  nextActionName={nextActionName}>{txt}</ActionLink>
+          }
+
+          cells.push(
+            <TableCell key={i.toString()}>
+                {txt}
+            </TableCell>
+          )
         }
-
-        cells.push(
-          <TableCell key={i.toString()}>
-              {txt}
-          </TableCell>
+        rowComps.push(
+          <TableRow className={classes.row} key={row._id}>
+              {cells}
+          </TableRow>
         )
       }
-
-      rowComps.push(
-        <TableRow className={classes.row} key={row._id}>
-            {cells}
-        </TableRow>
-      )
     })
 
     return (
       <Paper className={classes.root}>
       <Toolbar>
         <div>
-          <Typography variant="h6">
+          <Typography className={classes.tableTitle} variant="h6">
               {data.arrayName}
           </Typography>
+          <TextField className={classes.filter} onChange={this.filter} value={this.state.filter}></TextField>
         </div>
       </Toolbar>
         <Table className={classes.table}>
@@ -213,7 +239,7 @@ class TableResult extends React.Component {
   _getDataGridInfo (data) {
     let colCnt = 0
 
-    data.rows.forEach(r => {
+    this.rows.forEach(r => {
       if (r.values.length > colCnt) {
         colCnt = r.values.length
       }

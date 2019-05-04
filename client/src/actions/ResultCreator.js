@@ -127,7 +127,6 @@ class ResultCreator {
         let data = {
             headers: [],
             rows: [],
-            rawRows: [],
             action: action,
             arrayName: arrayName,
             clicks:[]
@@ -178,6 +177,7 @@ class ResultCreator {
         rows.forEach(row => {
             let formattedRow = {
                 _id: 'row' + id++,
+                rawRow: row,
                 values: []
             }
 
@@ -200,7 +200,6 @@ class ResultCreator {
             })
 
             data.rows.push(formattedRow)
-            data.rawRows.push(row)
         })        
 
         return <TableResult data={data} key={gridKey}></TableResult>
