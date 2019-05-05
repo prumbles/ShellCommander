@@ -159,7 +159,7 @@ class TableResult extends React.Component {
         showRow = false
 
         if (row.values.find(v => {
-          return v.toLowerCase().indexOf(formattedFilter) >= 0
+          return v.toString().toLowerCase().indexOf(formattedFilter) >= 0
         })) {
           showRow = true
         }

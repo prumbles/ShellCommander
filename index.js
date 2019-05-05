@@ -42,7 +42,15 @@ app.get('*', (req,res) =>{
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
-const port = process.env.PORT || 5000;
+let port = process.env.PORT || 5000;
+const args = process.argv.slice(2)
+if (args && args.length === 1 && args[0].indexOf('=') > 0) {
+    let kv = args[0].split('=')
+    if (kv[0] === 'port') {
+        port = kv[1]
+    }
+}
+
 app.listen(port, 'localhost');
 
 console.log('App is listening on port ' + port);
