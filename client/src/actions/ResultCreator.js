@@ -122,7 +122,7 @@ class ResultCreator {
     }
 
     static _getJsonArrayGrid = (action, rows, arrayName, gridKey) => {
-        let arrConfig = action.arrays ? action.arrays[arrayName] : null
+        let arrConfig = action.arrays ? action.arrays[arrayName] : ( action.array || null )
 
         let data = {
             headers: [],
@@ -206,15 +206,67 @@ class ResultCreator {
     }
 
     static _getDelimitedTextGrid = (action, actionResponse) => {
-        let data = {
-            rows: [],
-            clicks: action.clicks,
-            action: action
+        let value = actionResponse.value
+        let transform = action.transform || {}
+        transform.start = transform.start || 0
+        transform.end = transform.end || value.length
+        transform.replace = transform.replace || [{
+            text: '\\n\\s+',
+            with: '\n'
+        }]
+        transform.rowDelimiter = transform.rowDelimiter || '\\n'
+        transform.rowFilter = transform.rowFilter || null
+        transform.colDelimiter = transform.colDelimiter || '\\s+'
+        transform.hasHeaders = (typeof transform.hasHeaders === 'undefined') ? false : transform.hasHeaders
+
+        let matches = null
+
+        //first keep only the text that is defined by the start and end properties
+        let start = 0
+        let end = value.length
+        if (transform.start) {
+            matches = value.match(new RegExp(transform.start))
+            if (matches) {
+                start = matches.index
+            }
         }
 
-        let delimiter = action.delimiter ? new RegExp(action.delimiter) : null
-        let id = 0
-        actionResponse.value.split('\n').forEach((row, rowIndex) => {
+        if (transform.end) {
+            matches = value.match(new RegExp(transform.end))
+            if (matches) {
+                end = matches.index
+            }
+        }
+
+        value = value.substring(start, end)
+
+        //next, replace all text given by 'replace'
+        if (transform.replace) {
+            transform.replace.forEach(replace => {
+                value = value.replace(new RegExp(replace.text, 'g'), replace.with)
+            })
+        }
+
+        //get all rows using the row delimiter
+        let valueRows = value.split(new RegExp(transform.rowDelimiter))
+
+        //filter rows if row match 'filterRow'
+        if (transform.rowFilter) {
+            let filterRowRegex = new RegExp(transform.rowFilter)
+            for (let i = valueRows.length-1; i>=0; i--) {
+                let row = valueRows[i]
+
+                if (row.match(filterRowRegex)) {
+                    valueRows.splice(i, 1)
+                }
+            }
+        }
+
+        let delimiter = transform.colDelimiter ? (new RegExp(transform.colDelimiter)) : null
+        let jsonRows = []
+        let jsonColumnToKeyMap = []
+
+        valueRows.forEach((row, rowIndex) => {
             let rowValues = []
 
             if (delimiter) {
@@ -223,23 +275,33 @@ class ResultCreator {
                 rowValues = [row]
             }
 
-            if (rowIndex === 0 && action.hasHeaders) {
-                data.headers = rowValues.map(rv => {
-                    return {text: rv}
+            if (rowIndex === 0) {
+                rowValues.forEach((rv, i) => {
+                    jsonColumnToKeyMap.push(transform.hasHeaders ? rv : ('COL' + (i + 1).toString()))
                 })
-            } else {
-                let formattedRow = {
-                    _id: 'row' + id++,
-                    values: []
-                }                
-    
-                data.rows.push(formattedRow)
-
-                formattedRow.values = rowValues
             }
+
+            if (rowIndex > 0 || !transform.hasHeaders) {
+                let jsonRow = {}
+
+                rowValues.forEach((rv, i) => {
+                    let key = jsonColumnToKeyMap[i]
+
+                    if (key) {
+                        jsonRow[key] = rv
+                    }
+                })
+
+                jsonRows.push(jsonRow)
+            }
+            
         })
 
-        return <TableResult data={data}></TableResult>
+        return this._getJsonComponent(action, {
+            value: {
+                Items: jsonRows
+            }
+        })
     }
 
     static  _getRawText = (action, actionResponse) => {

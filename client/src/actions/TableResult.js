@@ -100,16 +100,15 @@ class TableResult extends React.Component {
 
   _getJsonRowVariables = (rowIndex) => {
     let data = this.props.data
-    let prev = data.action
     let variables = []
 
-    let arrayData = prev.arrays[data.arrayName]
+    let arrayData = this._getArrayConfig()
 
     if (arrayData.variables) {
       Object.keys(arrayData.variables).forEach(key => {
         variables.push({
           text: key,
-          value: StringUtils.anyToString(Query.find(this.props.data.rows[rowIndex].rawRow, arrayData.variables[key]))
+          value: StringUtils.anyToString(Query.find(data.rows[rowIndex].rawRow, arrayData.variables[key]))
         })
       })
     }
@@ -117,21 +116,9 @@ class TableResult extends React.Component {
     return variables
   }
 
-  _getNonJsonRowVariables = (row) => {
+  _getArrayConfig = () => {
     let data = this.props.data
-    let prev = data.action
-    let variables = []
-
-    prev.variables.forEach((v,i) => {
-      if (v) {
-        variables.push({
-          text: v,
-          value: row.values[i]
-        })
-      }
-    })
-
-    return variables
+    return data.action.arrays ? data.action.arrays[data.arrayName] : ( data.action.array || null )
   }
 
   render() {
@@ -162,6 +149,7 @@ class TableResult extends React.Component {
 
     let rowComps = []
 
+    let arrConfig = this._getArrayConfig()
     this.props.data.rows.forEach((row, rowIndex) => {
       let cells = []
 
@@ -188,16 +176,10 @@ class TableResult extends React.Component {
 
           if (data.clicks && data.clicks[i]) {
             let nextActionName = ''
-            if (data.action.type === 'json') {
-              nextActionName = data.clicks[i]
-            } else {
-              nextActionName = data.action.clicks[i]
-            }
+            nextActionName = data.clicks[i]
             
             let variables = []
-            if (data.action.type !== 'json' && data.action.variables) {
-              variables = this._getNonJsonRowVariables(row)
-            } else if (data.action.arrays && data.action.arrays[data.arrayName]) {
+            if (arrConfig) {
               variables = this._getJsonRowVariables(rowIndex)
             }
 

@@ -79,12 +79,28 @@ const defaultConfig = {
         "topEnhanced": {
             text: "Resource Usage",
             shell: `
-                top -b -n1 | grep 'PID USER' -A 200
+                top -b -n1
             `,
-            delimiter: "\\s+",
-            hasHeaders: true,
-            variables: [_N,'pid',_N,_N,_N,_N,_N,_N,_N,_N,_N,_N],
-            clicks: [_N,'process',_N,_N,_N,_N,_N,_N,_N,_N,_N,_N]
+            transform: {
+                start: 'PID USER ',
+                end: 'null',
+                replace: [{
+                    text: '(\\n\\s+)',
+                    with: '\n'
+                }],
+                rowDelimiter: '\\n',
+                rowFilter: '^\\s+$',
+                colDelimiter: '\\s+',
+                hasHeaders: true
+            },
+            array: {
+                clicks: {
+                    'PID': 'process'
+                },
+                variables: {
+                    'pid': 'PID'
+                }
+            }
         },
         "catFromLs": {
             text: '{{filename}}',
@@ -104,9 +120,14 @@ const defaultConfig = {
             shell: `
                 ls {{path}}
             `,
-            delimiter: null,
-            variables: ['filename'],
-            clicks: ['catFromLs']
+            array: {
+                clicks: {
+                    'COL1': 'catFromLs'
+                },
+                variables: {
+                    'filename': 'COL1'
+                }
+            }
         },
         "lsPlus": {
             text: 'ls',
@@ -114,9 +135,14 @@ const defaultConfig = {
             shell: `
                 ls -ltra {{path}} | sed '/^total/d'
             `,
-            delimiter: "\\s+",
-            variables: [_N,_N,_N,_N,_N,_N,_N,_N,'filename'],
-            clicks: [_N,_N,_N,_N,_N,_N,_N,_N,'catFromLs']
+            array: {
+                clicks: {
+                    'COL9': 'catFromLs'
+                },
+                variables: {
+                    'filename': 'COL9'
+                }
+            }
         },
         "songs" : {
             text: 'Songs',
