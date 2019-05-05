@@ -208,8 +208,10 @@ const defaultConfig = {
                     },
                     omit: ['*'],
                     add: {
+                        'Team': 'name',
                         'Manager': 'current_manager.name->wiki(term=manager),search(term=manager)',
-                        'Field': '/sports/sports_team/arena_stadium.1.name'
+                        'Field': '/sports/sports_team/arena_stadium.1.name',
+                        'Wins': 'team_stats.0.wins'
                     }
                 }
             }

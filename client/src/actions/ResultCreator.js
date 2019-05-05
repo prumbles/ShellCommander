@@ -196,7 +196,12 @@ class ResultCreator {
             })
 
             addedColumns.forEach(c => {
-                formattedRow.values.push(StringUtils.anyToString(Query.find(row, c.path)))
+                let queryResult = Query.find(row, c.path)
+
+                if(typeof queryResult === 'object') {
+                    queryResult = StringUtils.anyToString(queryResult)
+                }
+                formattedRow.values.push(queryResult)
             })
 
             data.rows.push(formattedRow)
