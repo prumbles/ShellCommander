@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js port=5000",
-    "dev": "(cd client && npm install && npm start) & (npm install && npm start)",
+    "setup": "(cd client && npm install) && npm install",
+    "dev": "(cd client && npm start) & npm start",
     "prod": "(cd client && npm install && npm run build) && npm install && node index.js port=3000"
   },
   "keywords": [],
