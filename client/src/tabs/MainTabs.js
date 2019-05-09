@@ -7,7 +7,10 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import TabActions from './TabActions'
 import configurationStore from '../store/configurationStore'
-
+import AddIcon from '@material-ui/icons/Add';
+import AddTab from '../settings/AddTab'
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
 function TabContainer(props) {
   return (
@@ -26,20 +29,35 @@ const styles = theme => ({
     flexGrow: 1,
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+  },
+  add: {
+    width: 40,
+    minWidth: 40
+  },
+  addIcon: {
+    fill: '#090'
+  },
+  deleteIcon: {
+    fill: '#c00',
+    position: 'relative',
+    top: 5
   }
 });
 
 class ScrollableTabsButtonAuto extends React.Component {
   state = {
-    
   };
 
   handleChange = (event, value) => {
-    configurationStore.selectTabByText(value)
+    if (value === '_addTab') {
+      configurationStore.beginAddNewTab()
+    } else {
+      configurationStore.selectTabByText(value)
+    }
   };
 
   componentDidMount() {
-    configurationStore.registerStoreChange(this, ['configuration', 'selectedTab']);
+    configurationStore.registerStoreChange(this, ['configuration', 'selectedTab', 'addNewTab', 'editMode']);
   }
 
   componentWillUnmount() {
@@ -51,9 +69,14 @@ class ScrollableTabsButtonAuto extends React.Component {
 
     let value = configurationStore.selectedTab ? configurationStore.selectedTab.text : null
     let tabs = configurationStore.configuration.tabs
+    let addTabComp = ''
+    if (configurationStore.addingNewTab) {
+      addTabComp = <AddTab />
+    }
 
     return (
       <div className={classes.root}>
+        {addTabComp}
         <AppBar position="static" color="default">
           <Tabs
             value={value}
@@ -64,8 +87,16 @@ class ScrollableTabsButtonAuto extends React.Component {
             scrollButtons="auto"
           >
             {tabs.map((val, ind) => {
-                return <Tab key={val.text} label={val.text} value={val.text} />
+                let valComp = val.text
+                if (configurationStore.editMode) {
+                  valComp = <div>{val.text}<DeleteIcon className={classes.deleteIcon} />
+                  </div>
+                }
+                return <Tab key={val.text} label={valComp} value={val.text} />
             })}
+            {configurationStore.editMode &&
+              <Tab value="_addTab" className={classes.add} icon={<AddIcon className={classes.addIcon} />} />            
+            }
           </Tabs>
         </AppBar>
         <TabContainer>

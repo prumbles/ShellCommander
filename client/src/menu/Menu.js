@@ -17,6 +17,12 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import Fab from '@material-ui/core/Fab';
 
 
 const styles = theme => ({
@@ -85,6 +91,12 @@ const styles = theme => ({
     height: '100%',
     backgroundColor: 'rgba(100,100,100,.1)',
     zIndex: 10000
+  },
+  editCont: {
+    marginLeft:20
+  },
+  editLabel: {
+    color: 'white'
   }
 });
 
@@ -97,8 +109,21 @@ class PrimarySearchAppBar extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     settingsOpen: false,
-    configurationJSON: ''
+    configurationJSON: '',
+    contextOpen: false
   };
+
+  onContextOpen = () => {
+    this.setState({
+      contextOpen: true
+    })
+  }
+
+  onContextClose = () => {
+    this.setState({
+      contextOpen: false
+    })
+  }
 
   handleSettingsClose = () => {
     this.setState({
@@ -132,8 +157,16 @@ class PrimarySearchAppBar extends React.Component {
     configurationStore.selectContextByText(event.target.value)
   }
 
+  editModeChange = (event) => {
+    if (event.target.checked) {
+      configurationStore.enterEditMode()
+    } else {
+      configurationStore.exitEditMode()
+    }
+  }
+
   componentDidMount() {
-    configurationStore.registerStoreChange(this, ['context', 'configuration', 'loading']);
+    configurationStore.registerStoreChange(this, ['context', 'configuration', 'loading', 'editMode']);
   }
 
   componentWillUnmount() {
@@ -145,7 +178,6 @@ class PrimarySearchAppBar extends React.Component {
     
     let selectedContext = configurationStore.selectedContext
     let contextItems = configurationStore.configuration.contextItems
-
     return (
       <div className={classes.root}>
       {configurationStore.loading &&
@@ -185,6 +217,32 @@ class PrimarySearchAppBar extends React.Component {
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               Shell Commander
             </Typography>
+            <FormControlLabel
+              className={classes.editCont}
+              classes={{
+                root: classes.editCont,
+                label: classes.editLabel
+              }}
+              control={
+                <Switch
+                  checked={configurationStore.editMode}
+                  onChange={this.editModeChange}
+                  value="editMode"
+                />
+              }
+              label="Edit Mode"
+            />
+            {configurationStore.editMode &&
+              <Fab
+                variant="extended"
+                size="small"
+                color="secondary"
+                aria-label="Edit Action"
+              >
+                <EditIcon />
+                Edit Actions
+              </Fab>
+            }
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <FormControl className={classes.formControl}>
@@ -192,18 +250,37 @@ class PrimarySearchAppBar extends React.Component {
                   value={selectedContext.text}
                   classes={{root: classes.selectRoot, select: classes.selectInput, icon: classes.selectIcon}}
                   onChange={this.handleContextChange}
+                  open={this.state.contextOpen}
+                  onOpen={this.onContextOpen}
+                  onClose={this.onContextClose}
                   input={<Input name="context" id="context-auto-width" />}
                   variant="outlined"
                   autoWidth
                 >
                   {contextItems.map((val, index) => {
-                    return <MenuItem key={val.text} value={val.text}>{val.text}</MenuItem>
+                    return <MenuItem key={val.text} value={val.text}>
+                      {configurationStore.editMode &&
+                        <IconButton color="inherit">
+                          <DeleteIcon />
+                        </IconButton>
+                      }
+                      {val.text}
+                    </MenuItem>
                   })}
+                  {configurationStore.editMode &&
+                    <MenuItem>
+                      <IconButton color="inherit" onClick={this.handleSettingsOpen}>
+                        <AddIcon />
+                      </IconButton>
+                    </MenuItem>
+                  }
                 </Select>
               </FormControl>
-              <IconButton color="inherit" onClick={this.handleSettingsOpen}>
-                <SettingsIcon />
-              </IconButton>
+              {configurationStore.editMode &&
+                <IconButton color="inherit" onClick={this.handleSettingsOpen}>
+                  <SettingsIcon />
+                </IconButton>
+              }
             </div>
           </Toolbar>
         </AppBar>

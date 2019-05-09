@@ -43,6 +43,22 @@ class configurationStore extends store {
         return this._loading
     }
 
+    get addingNewTab() {
+        return this._addingNewTab
+    }
+
+    get addingNewSubTab() {
+        return this._addingNewSubTab
+    }
+
+    get addingNewAction() {
+        return this._addingNewAction
+    }
+
+    get editMode() {
+        return this._editMode
+    }
+
     updateConfiguration = (config) => {
         this._data.set(config)
         this._configuration = this._data.getConfig()
@@ -118,6 +134,48 @@ class configurationStore extends store {
 
             this._actionChain.pop()
         }
+    }
+
+    enterEditMode = () => {
+        this._editMode = true
+        this._emitChange('editMode')
+    }
+
+    exitEditMode = () => {
+        this._editMode = false
+        this._emitChange('editMode')
+    }
+
+    beginAddNewTab = () => {
+        this._addingNewTab = true
+        this._emitChange('addNewTab')
+    }
+
+    saveNewTab = (text) => {
+        this.configuration.tabs.push({
+            text: text,
+            items: []
+        })
+        this._addingNewTab = false
+        this._emitChange('addNewTab')
+
+        this._data.set(this.configuration)
+        this._emitChange('configuration')
+    }
+
+    endAddNewTab = () => {
+        this._addingNewTab = false
+        this._emitChange('addNewTab')
+    }
+
+    beginAddNewSubTab = (parentTab) => {
+        this._addingNewSubTab = true
+        this._emitChange('addNewSubTab')
+    }
+
+    beginAddNewAction = () => {
+        this._addingNewAction = true
+        this._emitChange('addNewAction')
     }
 
     _selectAction = (action, variables) => {
@@ -282,6 +340,10 @@ class configurationStore extends store {
         this._clearVariables()
 
         this._loading = false
+        this._addingNewTab = false
+        this._addingNewSubTab = false
+        this._addingNewAction = false
+        this._editMode = false
     }
 
     _clearVariables = () => {

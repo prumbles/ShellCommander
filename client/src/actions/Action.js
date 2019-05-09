@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import configurationStore from '../store/configurationStore'
 import Button from '@material-ui/core/Button';
 import ResultCreator from './ResultCreator'
+import EditIcon from '@material-ui/icons/Edit';
+import Fab from '@material-ui/core/Fab';
 
 const styles = theme => ({
   root: {
@@ -97,7 +99,8 @@ class Action extends React.Component {
             callback: () => {
                 this._fixActionOnChange(false)
             }
-        }, 
+        },
+        'editMode',
         'actionResponse',
         {
             event: 'selectedPreviousAction',
@@ -125,7 +128,23 @@ class Action extends React.Component {
     const { classes } = this.props;
     let resp = <div></div>
     if (configurationStore.actionResponse) {
-      resp = ResultCreator.getComponent(configurationStore.selectedAction, configurationStore.actionResponse)
+      let editButton = ''
+      if (configurationStore.editMode) {
+        editButton = <Fab
+            variant="extended"
+            size="small"
+            color="secondary"
+            aria-label="Edit Action"
+          >
+            <EditIcon />
+            Edit Action
+          </Fab>
+      }
+
+      resp = <div>
+        {editButton}
+        {ResultCreator.getComponent(configurationStore.selectedAction, configurationStore.actionResponse)}
+      </div>
     }
 
     let inputs = []

@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import configurationStore from '../store/configurationStore'
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   root: {
@@ -56,6 +59,18 @@ const styles = theme => ({
   typography: {
     padding: theme.spacing.unit * 3,
   },
+  add: {
+    width: 40,
+    minWidth: 40
+  },
+  addIcon: {
+    fill: '#090'
+  },
+  deleteIcon: {
+    fill: '#c00',
+    position: 'relative',
+    top: 5
+  }
 });
 
 // function getFirstSubTab() {
@@ -114,16 +129,27 @@ class CustomizedTabs extends React.Component {
         <Tabs
           value={value}
           onChange={this.handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
           classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
         >
             {subTabs.map((val, ind) => {
+                let valComp = val.text
+                if (configurationStore.editMode) {
+                  valComp = <div>{val.text}<DeleteIcon className={classes.deleteIcon} />
+                  </div>
+                }
+
                 return <Tab 
                     key={val.text} 
-                    label={val.text} 
+                    label={valComp} 
                     value={val.text}
                     disableRipple
                     classes={{ root: classes.tabRoot, selected: classes.tabSelected }} />
             })}
+            {configurationStore.editMode &&
+              <Tab value="_addSubTab" className={classes.add} icon={<AddIcon className={classes.addIcon} />} />            
+            }
         </Tabs>
         {breadcrumbItems.length > 0 && 
           <div className={classes.breadcrumbCont}>
