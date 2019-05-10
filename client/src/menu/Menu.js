@@ -17,7 +17,8 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
+import { JsonEditor as Editor } from 'jsoneditor-react';
+import 'jsoneditor-react/es/editor.min.css';
 
 const styles = theme => ({
   root: {
@@ -85,6 +86,9 @@ const styles = theme => ({
     height: '100%',
     backgroundColor: 'rgba(100,100,100,.1)',
     zIndex: 10000
+  },
+  editor: {
+    height:600
   }
 });
 
@@ -93,6 +97,11 @@ function Transition(props) {
 }
 
 class PrimarySearchAppBar extends React.Component {
+  constructor(props) {
+    super(props)
+    this._editorRef = React.createRef()
+  }
+
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
@@ -108,7 +117,7 @@ class PrimarySearchAppBar extends React.Component {
 
   handleSettingsSave = () => {
     configurationStore.updateConfiguration(
-      JSON.parse(this.state.configurationJSON)
+      this.state.configurationJSON
     )
     this.setState({
       settingsOpen: false
@@ -118,14 +127,19 @@ class PrimarySearchAppBar extends React.Component {
   handleSettingsOpen = () => {
     this.setState({
       settingsOpen: true,
-      configurationJSON: JSON.stringify(configurationStore.configuration, null, '\t')
+      configurationJSON: JSON.parse(JSON.stringify(configurationStore.configuration, null, '\t'))
     })
   }
 
-  handleConfigChange = (event) => {
+  handleConfigChange = (val) => {
     this.setState({
-      configurationJSON: event.target.value
+      configurationJSON: val
     })
+  }
+
+  handleSelectionChange = (start, end) => {
+    console.log(start)
+    console.log(end)
   }
 
   handleContextChange = (event) => {
@@ -140,11 +154,37 @@ class PrimarySearchAppBar extends React.Component {
     configurationStore.deregisterStoreChange(this)
   }
 
+  editorEvent = (data, event) => {
+    if (typeof data.value !== 'undefined' && data.field === 'shell') {
+      if (event.type === 'focus') {
+        console.log(this._editorRef)
+      } else if (event.type === 'blur') {
+
+      }
+    }
+  }
+
   render() {
     const { classes } = this.props;
     
     let selectedContext = configurationStore.selectedContext
     let contextItems = configurationStore.configuration.contextItems
+    let editor = ''
+
+    if (this.state.settingsOpen) {
+      editor = <div
+          className={classes.editor}>
+            <Editor
+            ref={this._editorRef}
+            value={this.state.configurationJSON}
+            onChange={this.handleConfigChange}
+            navigationBar={false}
+            statusBar={false}
+            search={false}
+            onEvent={this.editorEvent}
+            allowedModes={['tree', 'text', 'form', 'view', 'code']}/>
+          </div>
+    }
 
     return (
       <div className={classes.root}>
@@ -170,14 +210,7 @@ class PrimarySearchAppBar extends React.Component {
             </Toolbar>
           </AppBar>
           <div>
-          <TextField
-            label="JSON Configuration"
-            className={classes.configTextfield}
-            multiline
-            value={this.state.configurationJSON}
-            onChange={this.handleConfigChange}
-            margin="normal"
-          />
+            {editor}
           </div>
         </Dialog>
         <AppBar position="static" color="primary">
