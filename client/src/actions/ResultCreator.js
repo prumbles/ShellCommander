@@ -316,9 +316,59 @@ class ResultCreator {
         }
 
         actionResponse.value = actionResponse.value.split('\t').join('&nbsp;&nbsp;&nbsp;&nbsp;')
+        let val = actionResponse.value
+
+        let findings = []
+
+        if (action.clicks) {
+            action.clicks.forEach(click => {
+                if (click.regex) {
+                    let reg = new RegExp(click.regex, 'g')
+                    let res
+                    while ((res = reg.exec(val)) !== null) {
+                        findings.push({
+                            index: res.index,
+                            size: res[0].length,
+                            click: click
+                        })
+                    }
+                }
+            })
+
+            findings.sort((a,b) => {
+                return a.index - b.index
+            })
+
+            let comps = []
+            let prevIndex = 0
+            let cnt = 0
+
+            findings.forEach(f => {
+                if (f.index > prevIndex) {
+                    comps.push(<span key={'raw' + cnt}>{val.substring(prevIndex, f.index)}</span>)
+                    cnt++
+                }
+                let linkValue = val.substring(f.index, f.index + f.size)
+                let actionName = f.click.action
+                let lnk = <ActionLink key={'raw' + cnt} variables={[{
+                        text: 'selection',
+                        value: linkValue
+                    }]} nextActionName={actionName}>{linkValue}</ActionLink>
+                
+                comps.push(lnk)
+                prevIndex = f.index + f.size
+                cnt++
+            })
+
+            if (prevIndex < val.length) {
+                comps.push(<span key={'raw' + cnt}>{val.substring(prevIndex)}</span>)
+            }
+
+            val = comps
+        }
 
         return <p>
-            <span style={style}>{actionResponse.value}</span>
+            <span style={style}>{val}</span>
         </p>
     }
 

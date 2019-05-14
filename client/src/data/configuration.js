@@ -1,5 +1,4 @@
 import data from './data'
-const _N = null
 
 const defaultConfig = {
     contextItems: [
@@ -74,7 +73,13 @@ const defaultConfig = {
             shell: `
                 top -b -n1
             `,
-            type: 'raw'
+            type: 'raw',
+			"clicks": [
+				{
+					"regex": "(?<=\\n\\s*)\\d+",
+					"action": "process(pid=selection)"
+				}
+			]
         },
         "topEnhanced": {
             text: "Resource Usage",
