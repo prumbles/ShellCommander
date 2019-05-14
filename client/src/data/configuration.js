@@ -1,5 +1,4 @@
 import data from './data'
-const _N = null
 
 const defaultConfig = {
     contextItems: [

@@ -87,8 +87,31 @@ const styles = theme => ({
     backgroundColor: 'rgba(100,100,100,.1)',
     zIndex: 10000
   },
-  editor: {
-    height:600
+  editorSection: {
+    height:'calc(100vh - 70px)',
+    overflow: 'hidden',
+  },
+  editorCont: {
+    height:'calc(100vh - 70px)',
+    overflow: 'auto',
+    borderBottom: '1px solid #aaa'
+  },
+  editorContOpen: {
+    height:'calc(100vh - 270px)',
+    overflow: 'auto',
+    borderBottom: '1px solid #aaa'
+  },
+  editorTextFieldCont: {
+    height: 0,
+    display:'none'
+  },
+  editorTextFieldContOpen: {
+    height: 200,
+    overflow: 'hidden'
+  },
+  editorTextField: {
+    height: 195,
+    width: '100%'
   }
 });
 
@@ -106,7 +129,9 @@ class PrimarySearchAppBar extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     settingsOpen: false,
-    configurationJSON: ''
+    configurationJSON: '',
+    selectedValue: null,
+    selectedValueText: ''
   };
 
   handleSettingsClose = () => {
@@ -137,11 +162,6 @@ class PrimarySearchAppBar extends React.Component {
     })
   }
 
-  handleSelectionChange = (start, end) => {
-    console.log(start)
-    console.log(end)
-  }
-
   handleContextChange = (event) => {
     configurationStore.selectContextByText(event.target.value)
   }
@@ -155,13 +175,38 @@ class PrimarySearchAppBar extends React.Component {
   }
 
   editorEvent = (data, event) => {
-    if (typeof data.value !== 'undefined' && data.field === 'shell') {
-      if (event.type === 'focus') {
-        console.log(this._editorRef)
-      } else if (event.type === 'blur') {
-
+    if (event.type === 'focus') {
+      if (typeof data.value !== 'undefined' && data.field === 'shell') {
+        console.log(data)
+        this.setState({
+          selectedValue: data,
+          selectedValueText: data.value
+        })
+      } else {
+        this.setState({
+          selectedValue: null,
+          selectedValueText: ''
+        })
       }
     }
+  }
+
+  updateConfig = (obj, path, val) => {
+    let ptr = obj
+    for (let i=0;i<(path.length-1); i++) {
+      ptr = ptr[path[i]]
+    }
+
+    ptr[path[path.length - 1]] = val
+  }
+
+  selectedValueTextChange = (evt) => {
+    this.updateConfig(this.state.configurationJSON, this.state.selectedValue.path, evt.target.value)
+
+    this.setState({
+      selectedValueText: evt.target.value,
+      configurationJSON: this.state.configurationJSON
+    })
   }
 
   render() {
@@ -170,19 +215,36 @@ class PrimarySearchAppBar extends React.Component {
     let selectedContext = configurationStore.selectedContext
     let contextItems = configurationStore.configuration.contextItems
     let editor = ''
+    let editorContClass = this.state.selectedValue ? classes.editorContOpen : classes.editorCont
+    let editorTextFieldCont = this.state.selectedValue ? classes.editorTextFieldContOpen : classes.editorTextFieldCont
 
     if (this.state.settingsOpen) {
+      let selectedValueText = this.selectedValue ? this.selectedValue.value : ''
       editor = <div
-          className={classes.editor}>
-            <Editor
-            ref={this._editorRef}
-            value={this.state.configurationJSON}
-            onChange={this.handleConfigChange}
-            navigationBar={false}
-            statusBar={false}
-            search={false}
-            onEvent={this.editorEvent}
-            allowedModes={['tree', 'text', 'form', 'view', 'code']}/>
+          className={classes.editorSection}>
+            <div className={editorContClass}>
+              <Editor
+              ref={this._editorRef}
+              value={this.state.configurationJSON}
+              onChange={this.handleConfigChange}
+              navigationBar={false}
+              statusBar={false}
+              search={false}
+              onEvent={this.editorEvent}
+              allowedModes={['tree', 'text', 'form', 'view', 'code']}/>
+            </div>
+            <div className={editorTextFieldCont}>
+              <TextField
+                id="standard-multiline-flexible"
+                label="Shell"
+                multiline
+                rowsMax="4"
+                className={classes.editorTextField}
+                margin="normal"
+                value={this.state.selectedValueText}
+                onChange={this.selectedValueTextChange}
+              />
+            </div>
           </div>
     }
 
