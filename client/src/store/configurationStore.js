@@ -43,6 +43,14 @@ class configurationStore extends store {
         return this._loading
     }
 
+    get settings() {
+        return this._configurationCopy
+    }
+
+    beginSettings = () => {
+        this._configurationCopy = JSON.parse(JSON.stringify(this._configuration))
+    }
+
     updateConfiguration = (config) => {
         this._data.set(config)
         this._configuration = this._data.getConfig()

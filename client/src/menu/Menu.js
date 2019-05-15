@@ -17,6 +17,7 @@ import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Settings from '../settings/Settings'
 
 
 const styles = theme => ({
@@ -116,6 +117,8 @@ class PrimarySearchAppBar extends React.Component {
   }
 
   handleSettingsOpen = () => {
+    configurationStore.beginSettings()
+    
     this.setState({
       settingsOpen: true,
       configurationJSON: JSON.stringify(configurationStore.configuration, null, '\t')
@@ -170,14 +173,15 @@ class PrimarySearchAppBar extends React.Component {
             </Toolbar>
           </AppBar>
           <div>
-          <TextField
+          {/* <TextField
             label="JSON Configuration"
             className={classes.configTextfield}
             multiline
             value={this.state.configurationJSON}
             onChange={this.handleConfigChange}
             margin="normal"
-          />
+          /> */}
+          <Settings></Settings>
           </div>
         </Dialog>
         <AppBar position="static" color="primary">
