@@ -4,12 +4,20 @@ import TextField from '@material-ui/core/TextField';
 import configurationStore from '../store/configurationStore'
 import Button from '@material-ui/core/Button';
 import ResultCreator from './ResultCreator'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import EditAction from '../settings/EditAction'
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
 
 const styles = theme => ({
   root: {
     width: "100%",
     overflow: "auto",
-    padding: 5
+    padding: 5,
+    position: "relative"
   },
   formContainer: {
  
@@ -30,12 +38,18 @@ const styles = theme => ({
   },
   errorMsg: {
     color:"red"
+  },
+  editButton: {
+    position: 'fixed',
+    right: 30,
+    bottom: 30
   }
 });
 
 class Action extends React.Component {
   state = {
-    inputValues: []
+    inputValues: [],
+    isEditingAction: false
   };
 
   handleChange = inp => event => {
@@ -121,6 +135,25 @@ class Action extends React.Component {
     configurationStore.deregisterStoreChange(this)
   }
 
+  exitEditingAction = () => {
+    this.setState({
+      isEditingAction: false
+    })
+  }
+
+  saveEditingAction = () => {
+    configurationStore.updateCurrentAction()
+    this.setState({
+      isEditingAction: false
+    })
+  }
+
+  startEditingAction = () => {
+    this.setState({
+      isEditingAction: true
+    })
+  }
+
   render() {
     const { classes } = this.props;
     let resp = <div></div>
@@ -147,6 +180,27 @@ class Action extends React.Component {
 
     return (
       <div className={classes.root}>
+        <Dialog
+          maxWidth="xl"
+          fullWidth={true}
+          open={this.state.isEditingAction}
+          onClose={this.exitEditingAction}
+        >
+          <DialogTitle>Edit Action</DialogTitle>
+          <DialogContent>
+            {this.state.isEditingAction &&
+              <EditAction></EditAction>
+            }
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={this.exitEditingAction} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.saveEditingAction} color="primary" autoFocus>
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
         <div className={classes.formContainer}>
             <form className={classes.form} noValidate autoComplete="off" onSubmit={this.onFormSubmit}>
                 {inputs}
@@ -160,6 +214,9 @@ class Action extends React.Component {
             </div>
         </div>
         <div className={classes.msg}>{resp}</div>
+        <Fab style={{display: configurationStore.selectedAction ? "flex" : "none"}} size="small" color="secondary" aria-label="Edit" className={classes.editButton} onClick={this.startEditingAction}>
+          <EditIcon></EditIcon>
+        </Fab>
       </div>
     );
   }

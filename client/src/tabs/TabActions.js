@@ -58,11 +58,6 @@ const styles = theme => ({
   },
 });
 
-// function getFirstSubTab() {
-//     return (configurationStore.selectedTab && configurationStore.selectedTab.items.length > 0) 
-//         ? configurationStore.selectedTab.items[0] : null;
-// }
-
 class CustomizedTabs extends React.Component {
   state = {
     
@@ -115,6 +110,8 @@ class CustomizedTabs extends React.Component {
           value={value}
           onChange={this.handleChange}
           classes={{ root: classes.tabsRoot, indicator: classes.tabsIndicator }}
+          variant="scrollable"
+          scrollButtons="auto"
         >
             {subTabs.map((val, ind) => {
                 return <Tab 

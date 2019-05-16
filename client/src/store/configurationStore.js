@@ -43,6 +43,34 @@ class configurationStore extends store {
         return this._loading
     }
 
+    get editingAction() {
+        return this._editingAction
+    }
+
+    updateCurrentAction = () => {
+        this._emitChange('calculateEditingAction')
+        this.updateAction(this.selectedAction, this.editingAction)
+    }
+
+    setEditingAction = (action) => {
+        this._editingAction = action
+    }
+
+    updateAction = (action, newAction) => {
+        Object.keys(action).forEach(oldKey => {
+            delete action[oldKey]
+        })
+
+        Object.keys(newAction).forEach(key => {
+            action[key] = newAction[key]
+        })
+
+        this._data.set(this._configuration)
+        this._emitChange('selectedActionUpdate')
+    }
+
+
+    
     updateConfiguration = (config) => {
         this._data.set(config)
         this._configuration = this._data.getConfig()
