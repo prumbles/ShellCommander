@@ -8,6 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import EditableGrid from '../controls/EditableGrid'
 
 const styles = theme => ({
   tabsRoot: {
@@ -53,20 +55,31 @@ const styles = theme => ({
     padding: 10
   },
   textInput: {
-    width: 300
+    width: 600,
+    maxWidth: '100%'
   },
   shellInput: {
     width: '100%',
     height: 300
   },
   shellTextField: {
-    fontFamily: '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
+    fontFamily: '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace',
+    whiteSpace: 'nowrap',
+    paddingBottom: 10
   },
   transformRoot: {
     margin: "30px 0px 10px 0px",
     display:"block",
     border: "1px solid #ccc",
-    padding: 20
+    padding: 20,
+    width: 600,
+    maxWidth: '100%'
+  },
+  transformField: {
+    marginBottom: 20
+  },
+  replaceWith: {
+    marginBottom: 20
   }
 });
 
@@ -244,36 +257,75 @@ class EditAction extends React.Component {
   _getTransformComp = () => {
     const { classes } = this.props
     const { transform } = this.state.action
-    const { start = "", end = "", replace, rowDelimiter = "\\n", rowFilter = "", colDelimiter = "\\s+", hasHeaders = false } = transform
+    const { start = "", end = "", replace = [], rowDelimiter = "\\n", rowFilter = "", colDelimiter = "\\s+", hasHeaders = false } = transform
     return <FormControl className={classes.transformRoot} component="fieldset">
         <FormLabel component="legend">Transform</FormLabel>
         <FormGroup>
-        <TextField value={start}
-            label="Start"
-            onChange={this.textFieldChangeEvent(['transform','start'])}></TextField>
-        <TextField value={end}
-            label="End"
-            onChange={this.textFieldChangeEvent(['transform','end'])}></TextField>
-        <TextField value={rowDelimiter}
-            label="Row Delimiter"
-            onChange={this.textFieldChangeEvent(['transform','rowDelimiter'])}></TextField>
-        <TextField value={rowFilter}
-            label="Row Filter"
-            onChange={this.textFieldChangeEvent(['transform','rowFilter'])}></TextField>
-        <TextField value={colDelimiter}
-            label="Column Delimiter"
-            onChange={this.textFieldChangeEvent(['transform','colDelimiter'])}></TextField>
+          <TextField value={start}
+              className={classes.transformField}
+              label="Start"
+              InputLabelProps={{
+                shrink: true
+              }}
+              onChange={this.fieldChangeEvent(['transform','start'])}></TextField>
+          <TextField value={end}
+              className={classes.transformField}
+              label="End"
+              InputLabelProps={{
+                shrink: true
+              }}
+              onChange={this.fieldChangeEvent(['transform','end'])}></TextField>
+          <FormLabel
+            className={classes.transformField}>
+            Replace Text
+          </FormLabel>
+          <EditableGrid className={classes.replaceWith} value={replace} schema={{
+                text: String,
+                with: String
+              }}></EditableGrid>
+          <TextField value={rowDelimiter}
+              className={classes.transformField}
+              label="Row Delimiter"
+              InputLabelProps={{
+                shrink: true
+              }}
+              onChange={this.fieldChangeEvent(['transform','rowDelimiter'])}></TextField>
+          <TextField value={rowFilter}
+              className={classes.transformField}
+              label="Row Filter"
+              InputLabelProps={{
+                shrink: true
+              }}
+              onChange={this.fieldChangeEvent(['transform','rowFilter'])}></TextField>
+          <TextField value={colDelimiter}
+              className={classes.transformField}
+              label="Column Delimiter"
+              InputLabelProps={{
+                shrink: true
+              }}
+              onChange={this.fieldChangeEvent(['transform','colDelimiter'])}></TextField>
+          <FormControlLabel
+            className={classes.transformField}
+            control={
+              <Checkbox
+                checked={hasHeaders}
+                onChange={this.fieldChangeEvent(['transform','hasHeaders'], 'checked')}
+                value="hasHeaders"
+              />
+            }
+            label="First Row Is Headers"
+          />
         </FormGroup>
       </FormControl>
   }
 
-  textFieldChangeEvent = (path) => (evt) => {
+  fieldChangeEvent = (path, evtProperty) => (evt) => {
     let action = this.state.action
     let ptr = action, len = path.length
     for(let i=0;i<(len-1);i++) {
       ptr = ptr[path[i]]
     }
-    ptr[path[len-1]] = evt.target.value
+    ptr[path[len-1]] = (evtProperty ? evt.target[evtProperty] : evt.target.value)
     this.setState({
       action: action
     })

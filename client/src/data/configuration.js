@@ -88,7 +88,7 @@ const defaultConfig = {
             `,
             transform: {
                 start: 'PID USER ',
-                end: 'null',
+                end: '',
                 replace: [{
                     text: '(\\n\\s+)',
                     with: '\n'
