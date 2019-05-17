@@ -4,6 +4,10 @@ import configurationStore from '../store/configurationStore'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const styles = theme => ({
   tabsRoot: {
@@ -54,6 +58,15 @@ const styles = theme => ({
   shellInput: {
     width: '100%',
     height: 300
+  },
+  shellTextField: {
+    fontFamily: '"Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace'
+  },
+  transformRoot: {
+    margin: "30px 0px 10px 0px",
+    display:"block",
+    border: "1px solid #ccc",
+    padding: 20
   }
 });
 
@@ -76,6 +89,7 @@ class EditAction extends React.Component {
       }
     } else {
       this.setState({
+        actionJSON: JSON.stringify(this.state.action, null, '\t'),
         selectedTab: value
       })
     }
@@ -88,9 +102,10 @@ class EditAction extends React.Component {
   }
 
   componentWillMount() {
+    let selectedAction = configurationStore.selectedAction
     this.setState({
-      action: JSON.parse(JSON.stringify(configurationStore.selectedAction)),
-      actionJSON: JSON.stringify(configurationStore.selectedAction, null, '\t')
+      action: JSON.parse(JSON.stringify(selectedAction)),
+      actionJSON: JSON.stringify(selectedAction, null, '\t')
     })
   }
 
@@ -181,16 +196,16 @@ class EditAction extends React.Component {
           let action = JSON.parse(this.state.actionJSON)
           return action
         } catch (ex) {
-          throw "Malformed JSON"
+          throw new Error("Malformed JSON")
         }
 
       default:
-        throw "Unexpected Selected Tab"
+        throw new Error("Unexpected Selected Tab")
     }
   }
 
   _getEditComp = () => {
-    const { text, shell, url } = this.state.action
+    const { text, shell, url, transform } = this.state.action
     const { classes } = this.props
 
     return <div>
@@ -209,16 +224,59 @@ class EditAction extends React.Component {
             onChange={this.handleURLChange}></TextField>
         }
 
+        {transform && this._getTransformComp()}
+
         {(shell || shell === '') &&
           <TextField value={shell}
             className={classes.shellInput}
             label="Shell"
             multiline
+            inputProps={{
+              className: classes.shellTextField
+            }}
             margin="normal"
             onChange={this.handleShellChange}></TextField>
         }
       </form>
     </div>
+  }
+
+  _getTransformComp = () => {
+    const { classes } = this.props
+    const { transform } = this.state.action
+    const { start = "", end = "", replace, rowDelimiter = "\\n", rowFilter = "", colDelimiter = "\\s+", hasHeaders = false } = transform
+    return <FormControl className={classes.transformRoot} component="fieldset">
+        <FormLabel component="legend">Transform</FormLabel>
+        <FormGroup>
+        <TextField value={start}
+            label="Start"
+            onChange={this.textFieldChangeEvent(['transform','start'])}></TextField>
+        <TextField value={end}
+            label="End"
+            onChange={this.textFieldChangeEvent(['transform','end'])}></TextField>
+        <TextField value={rowDelimiter}
+            label="Row Delimiter"
+            onChange={this.textFieldChangeEvent(['transform','rowDelimiter'])}></TextField>
+        <TextField value={rowFilter}
+            label="Row Filter"
+            onChange={this.textFieldChangeEvent(['transform','rowFilter'])}></TextField>
+        <TextField value={colDelimiter}
+            label="Column Delimiter"
+            onChange={this.textFieldChangeEvent(['transform','colDelimiter'])}></TextField>
+        </FormGroup>
+      </FormControl>
+  }
+
+  textFieldChangeEvent = (path) => (evt) => {
+    let action = this.state.action
+    let ptr = action, len = path.length
+    for(let i=0;i<(len-1);i++) {
+      ptr = ptr[path[i]]
+    }
+    ptr[path[len-1]] = evt.target.value
+    this.setState({
+      action: action
+    })
   }
 
   _getJSONComp = () => {

@@ -213,14 +213,14 @@ class ResultCreator {
     static _getDelimitedTextGrid = (action, actionResponse) => {
         let value = actionResponse.value
         let transform = action.transform || {}
-        transform.start = transform.start || 0
-        transform.end = transform.end || value.length
+        transform.start = transform.start || ""
+        transform.end = transform.end || ""
         transform.replace = transform.replace || [{
             text: '\\n\\s+',
             with: '\n'
         }]
         transform.rowDelimiter = transform.rowDelimiter || '\\n'
-        transform.rowFilter = transform.rowFilter || null
+        transform.rowFilter = transform.rowFilter || ""
         transform.colDelimiter = transform.colDelimiter || '\\s+'
         transform.hasHeaders = (typeof transform.hasHeaders === 'undefined') ? false : transform.hasHeaders
 
