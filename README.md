@@ -6,7 +6,11 @@ To quickly see some example commands, run `npm run prod`. This will compile the 
 
 In the project directory, you can run:
 
+### `npm run setup`
+Installs all node dependencies for the client and server.  You need to run this before running `npm run dev` for the first time.
+
 ### `npm run dev`
+Before running this for the first time, run `npm run setup` to install dependencies.
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
